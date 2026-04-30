@@ -4,560 +4,616 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Seth — Your AI Sales Team</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,400&family=DM+Serif+Display&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   :root {
-    --bg-dark: #0a0a0f;
-    --bg-card: #12121a;
-    --bg-card-hover: #1a1a26;
-    --text-primary: #f0f0f5;
-    --text-secondary: #8a8a9a;
-    --text-muted: #5a5a6a;
-    --accent: #d4a843;
-    --accent-glow: rgba(212, 168, 67, 0.15);
-    --accent-hover: #e4b853;
-    --green: #34d399;
-    --green-muted: rgba(52, 211, 153, 0.12);
-    --purple: #a78bfa;
-    --purple-muted: rgba(167, 139, 250, 0.12);
-    --blue: #60a5fa;
-    --border: rgba(255, 255, 255, 0.06);
-    --border-hover: rgba(255, 255, 255, 0.12);
-    --radius: 12px;
-    --radius-sm: 8px;
+    --white: #ffffff;
+    --bg: #faf9f7;
+    --bg-warm: #f3f0eb;
+    --bg-dark: #1a1714;
+    --text: #1a1714;
+    --text-secondary: #6b6560;
+    --text-muted: #9b9590;
+    --accent: #c8601c;
+    --accent-light: #fff4ed;
+    --accent-hover: #a84e15;
+    --green: #2d7a4f;
+    --green-light: #edf7f0;
+    --purple: #6b4fc7;
+    --purple-light: #f3f0ff;
+    --border: #e8e4df;
+    --border-light: #f0ece7;
+    --radius: 16px;
+    --radius-sm: 10px;
+    --radius-xs: 6px;
+    --sans: 'DM Sans', -apple-system, system-ui, sans-serif;
+    --serif: 'DM Serif Display', Georgia, serif;
   }
 
   html { scroll-behavior: smooth; }
   body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-    background: var(--bg-dark);
-    color: var(--text-primary);
+    font-family: var(--sans);
+    background: var(--bg);
+    color: var(--text);
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
   }
 
   /* ---- NAV ---- */
   nav {
-    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-    padding: 16px 40px;
+    position: sticky; top: 0; z-index: 100;
+    padding: 0 48px; height: 64px;
     display: flex; align-items: center; justify-content: space-between;
-    background: rgba(10, 10, 15, 0.8);
-    backdrop-filter: blur(20px);
-    border-bottom: 1px solid var(--border);
-    transition: background 0.3s;
+    background: rgba(250, 249, 247, 0.85);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border-light);
   }
+  .nav-left { display: flex; align-items: center; gap: 48px; }
   .nav-logo {
-    font-size: 20px; font-weight: 700; letter-spacing: -0.5px;
-    color: var(--accent);
+    font-family: var(--serif); font-size: 22px;
+    color: var(--text); text-decoration: none;
   }
   .nav-links { display: flex; gap: 32px; }
   .nav-links a {
-    color: var(--text-secondary); text-decoration: none; font-size: 14px;
-    font-weight: 500; transition: color 0.2s;
+    color: var(--text-secondary); text-decoration: none;
+    font-size: 14px; font-weight: 500; transition: color 0.2s;
   }
-  .nav-links a:hover { color: var(--text-primary); }
-  .nav-cta {
-    background: var(--accent); color: var(--bg-dark); padding: 8px 20px;
-    border-radius: 6px; font-weight: 600; font-size: 14px;
-    text-decoration: none; transition: background 0.2s;
+  .nav-links a:hover { color: var(--text); }
+  .nav-right { display: flex; align-items: center; gap: 16px; }
+  .nav-link-right {
+    color: var(--text); text-decoration: none;
+    font-size: 14px; font-weight: 500;
   }
-  .nav-cta:hover { background: var(--accent-hover); }
+  .btn-dark {
+    background: var(--bg-dark); color: var(--white); padding: 10px 22px;
+    border-radius: 100px; font-weight: 500; font-size: 14px;
+    text-decoration: none; transition: opacity 0.2s; border: none; cursor: pointer;
+    font-family: var(--sans);
+  }
+  .btn-dark:hover { opacity: 0.85; }
+  .btn-outline {
+    background: var(--white); color: var(--text); padding: 10px 22px;
+    border-radius: 100px; font-weight: 500; font-size: 14px;
+    text-decoration: none; transition: all 0.2s;
+    border: 1px solid var(--border); cursor: pointer;
+    font-family: var(--sans);
+  }
+  .btn-outline:hover { border-color: var(--text-muted); }
+
+  /* ---- WRAP ---- */
+  .wrap { max-width: 1200px; margin: 0 auto; padding: 0 48px; }
 
   /* ---- HERO ---- */
   .hero {
-    min-height: 100vh; display: flex; flex-direction: column;
-    align-items: center; justify-content: center; text-align: center;
-    padding: 120px 24px 80px;
-    position: relative; overflow: hidden;
+    padding: 80px 0 60px; display: grid;
+    grid-template-columns: 1fr 1fr; gap: 64px; align-items: center;
   }
-  .hero::before {
-    content: ''; position: absolute; top: -50%; left: -50%;
-    width: 200%; height: 200%;
-    background: radial-gradient(ellipse at 50% 30%, rgba(212, 168, 67, 0.06) 0%, transparent 60%),
-                radial-gradient(ellipse at 30% 70%, rgba(167, 139, 250, 0.04) 0%, transparent 50%);
-    pointer-events: none;
-  }
+  .hero-text {}
   .hero-badge {
-    display: inline-flex; align-items: center; gap: 8px;
-    padding: 6px 16px; border-radius: 20px;
-    background: var(--accent-glow); border: 1px solid rgba(212, 168, 67, 0.2);
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 5px 14px; border-radius: 100px;
+    background: var(--accent-light); border: 1px solid #f0ddd0;
     font-size: 13px; font-weight: 500; color: var(--accent);
-    margin-bottom: 32px; position: relative;
+    margin-bottom: 28px;
   }
+  .hero-badge svg { width: 14px; height: 14px; }
   .hero h1 {
-    font-size: clamp(48px, 8vw, 88px); font-weight: 800;
-    letter-spacing: -3px; line-height: 1;
-    margin-bottom: 24px; position: relative;
+    font-family: var(--serif); font-weight: 400;
+    font-size: 56px; line-height: 1.08;
+    letter-spacing: -1px; margin-bottom: 20px;
   }
-  .hero h1 span { color: var(--accent); }
-  .hero-sub {
-    font-size: clamp(18px, 2.5vw, 22px); color: var(--text-secondary);
-    max-width: 600px; line-height: 1.5; margin-bottom: 48px;
-    position: relative;
-  }
-  .hero-buttons {
-    display: flex; gap: 16px; flex-wrap: wrap;
-    justify-content: center; position: relative;
-  }
-  .btn-primary {
-    background: var(--accent); color: var(--bg-dark); padding: 14px 32px;
-    border-radius: var(--radius-sm); font-weight: 700; font-size: 16px;
-    text-decoration: none; transition: all 0.2s; border: none; cursor: pointer;
-  }
-  .btn-primary:hover { background: var(--accent-hover); transform: translateY(-1px); }
-  .btn-secondary {
-    background: transparent; color: var(--text-primary); padding: 14px 32px;
-    border-radius: var(--radius-sm); font-weight: 600; font-size: 16px;
-    text-decoration: none; transition: all 0.2s;
-    border: 1px solid var(--border-hover); cursor: pointer;
-  }
-  .btn-secondary:hover { border-color: var(--text-muted); background: rgba(255,255,255,0.03); }
-  .hero-stats {
-    display: flex; gap: 48px; margin-top: 64px; position: relative;
-  }
-  .hero-stat { text-align: center; }
-  .hero-stat-num {
-    font-size: 32px; font-weight: 800; color: var(--text-primary);
-    letter-spacing: -1px;
-  }
-  .hero-stat-label { font-size: 13px; color: var(--text-muted); margin-top: 4px; }
-
-  /* ---- SECTIONS ---- */
-  section { padding: 100px 24px; max-width: 1100px; margin: 0 auto; }
-  .section-label {
-    font-size: 13px; font-weight: 600; text-transform: uppercase;
-    letter-spacing: 2px; color: var(--accent); margin-bottom: 12px;
-  }
-  .section-title {
-    font-size: clamp(32px, 4vw, 44px); font-weight: 800;
-    letter-spacing: -1.5px; line-height: 1.1; margin-bottom: 16px;
-  }
-  .section-desc {
+  .hero-desc {
     font-size: 17px; color: var(--text-secondary);
-    max-width: 560px; line-height: 1.6; margin-bottom: 48px;
+    line-height: 1.65; max-width: 440px; margin-bottom: 36px;
   }
+  .hero-buttons { display: flex; gap: 12px; }
 
-  /* ---- DEMO TERMINAL ---- */
-  .demo {
-    border-top: 1px solid var(--border);
-    border-bottom: 1px solid var(--border);
-    padding: 100px 24px;
-  }
-  .demo-inner { max-width: 800px; margin: 0 auto; }
+  /* TERMINAL */
   .terminal {
-    background: #0d0d14; border-radius: var(--radius);
-    border: 1px solid var(--border); overflow: hidden;
+    background: var(--bg-dark); border-radius: var(--radius);
+    overflow: hidden; box-shadow: 0 24px 48px rgba(0,0,0,0.12);
   }
   .terminal-bar {
-    padding: 12px 16px; display: flex; align-items: center; gap: 8px;
-    border-bottom: 1px solid var(--border);
+    padding: 14px 18px; display: flex; align-items: center; gap: 7px;
+    background: #232019;
   }
-  .terminal-dot {
-    width: 12px; height: 12px; border-radius: 50%;
-    background: var(--border-hover);
-  }
+  .terminal-dot { width: 11px; height: 11px; border-radius: 50%; }
   .terminal-dot:nth-child(1) { background: #ff5f57; }
   .terminal-dot:nth-child(2) { background: #febc2e; }
   .terminal-dot:nth-child(3) { background: #28c840; }
-  .terminal-title {
-    margin-left: 8px; font-size: 12px; color: var(--text-muted);
-  }
   .terminal-body {
     padding: 24px; font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
-    font-size: 14px; line-height: 1.7; min-height: 280px;
+    font-size: 13px; line-height: 1.8; color: #a09888;
   }
-  .t-prompt { color: var(--green); }
-  .t-cmd { color: var(--text-primary); }
-  .t-dim { color: var(--text-muted); }
-  .t-ok { color: var(--green); }
-  .t-accent { color: var(--accent); }
-  .t-purple { color: var(--purple); }
-  .t-bar-fill { color: var(--accent); }
-  .t-bar-empty { color: #2a2a35; }
+  .t-prompt { color: #6ec87a; }
+  .t-cmd { color: #e8e0d4; }
+  .t-ok { color: #6ec87a; }
+  .t-hi { color: #e8c36e; }
+  .t-dim { color: #706858; }
+  .t-bar { color: #e8c36e; }
+  .t-bar-e { color: #332e24; }
 
-  /* ---- TWO PATHS ---- */
-  .paths-grid {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 24px;
+  /* ---- STATS STRIP ---- */
+  .stats-strip {
+    padding: 56px 0; border-bottom: 1px solid var(--border);
   }
+  .stats-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    text-align: center;
+  }
+  .stat {}
+  .stat-num {
+    font-family: var(--serif); font-size: 48px;
+    letter-spacing: -2px; line-height: 1;
+  }
+  .stat-label {
+    font-size: 13px; color: var(--text-muted);
+    text-transform: uppercase; letter-spacing: 1.5px;
+    margin-top: 8px; font-weight: 500;
+  }
+
+  /* ---- SECTION HELPERS ---- */
+  .section { padding: 80px 0; }
+  .section-top { margin-bottom: 48px; }
+  .pill {
+    display: inline-block; padding: 4px 14px; border-radius: 100px;
+    font-size: 12px; font-weight: 600; letter-spacing: 0.5px;
+    margin-bottom: 16px;
+  }
+  .pill-accent { background: var(--accent-light); color: var(--accent); border: 1px solid #f0ddd0; }
+  .pill-green { background: var(--green-light); color: var(--green); border: 1px solid #c8e6d0; }
+  .pill-purple { background: var(--purple-light); color: var(--purple); border: 1px solid #ddd4f7; }
+  .section-title {
+    font-family: var(--serif); font-size: 40px; font-weight: 400;
+    line-height: 1.15; letter-spacing: -0.5px; max-width: 560px;
+  }
+  .section-desc {
+    font-size: 16px; color: var(--text-secondary);
+    line-height: 1.65; max-width: 480px; margin-top: 16px;
+  }
+
+  /* ---- GET STARTED (TWO PATHS) ---- */
+  .paths-section { border-top: 1px solid var(--border); }
+  .paths-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
   .path-card {
-    background: var(--bg-card); border: 1px solid var(--border);
-    border-radius: var(--radius); padding: 40px;
-    transition: border-color 0.3s, background 0.3s; position: relative;
+    background: var(--white); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 40px; position: relative;
+    transition: box-shadow 0.3s;
   }
-  .path-card:hover { border-color: var(--border-hover); background: var(--bg-card-hover); }
-  .path-tag {
-    display: inline-block; padding: 4px 12px; border-radius: 4px;
-    font-size: 11px; font-weight: 700; text-transform: uppercase;
-    letter-spacing: 1px; margin-bottom: 20px;
-  }
-  .path-tag.easy { background: var(--green-muted); color: var(--green); }
-  .path-tag.power { background: var(--purple-muted); color: var(--purple); }
+  .path-card:hover { box-shadow: 0 8px 24px rgba(0,0,0,0.06); }
   .path-card h3 {
-    font-size: 24px; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 12px;
+    font-family: var(--serif); font-size: 26px; font-weight: 400;
+    margin-bottom: 10px;
   }
-  .path-card p { color: var(--text-secondary); font-size: 15px; margin-bottom: 24px; }
+  .path-card > p {
+    font-size: 15px; color: var(--text-secondary);
+    margin-bottom: 28px; line-height: 1.6;
+  }
   .steps { list-style: none; margin-bottom: 32px; }
   .steps li {
-    display: flex; align-items: flex-start; gap: 12px;
-    padding: 10px 0; border-bottom: 1px solid var(--border);
-    font-size: 14px; color: var(--text-secondary);
+    display: flex; align-items: flex-start; gap: 14px;
+    padding: 12px 0; font-size: 14px; color: var(--text-secondary);
+    border-bottom: 1px solid var(--border-light);
   }
   .steps li:last-child { border-bottom: none; }
+  .steps li strong { color: var(--text); }
   .step-num {
-    width: 24px; height: 24px; border-radius: 50%;
+    width: 26px; height: 26px; border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
     font-size: 12px; font-weight: 700; flex-shrink: 0;
   }
-  .easy .step-num { background: var(--green-muted); color: var(--green); }
-  .power .step-num { background: var(--purple-muted); color: var(--purple); }
+  .step-num-green { background: var(--green-light); color: var(--green); }
+  .step-num-purple { background: var(--purple-light); color: var(--purple); }
   .path-cta {
-    display: inline-block; padding: 12px 24px; border-radius: var(--radius-sm);
-    font-weight: 600; font-size: 14px; text-decoration: none; transition: all 0.2s;
-    width: 100%; text-align: center;
+    display: inline-block; padding: 12px 28px; border-radius: 100px;
+    font-weight: 600; font-size: 14px; text-decoration: none;
+    transition: all 0.2s;
   }
-  .path-cta.easy-cta { background: var(--green-muted); color: var(--green); border: 1px solid rgba(52,211,153,0.2); }
-  .path-cta.easy-cta:hover { background: rgba(52,211,153,0.2); }
-  .path-cta.power-cta { background: var(--purple-muted); color: var(--purple); border: 1px solid rgba(167,139,250,0.2); }
-  .path-cta.power-cta:hover { background: rgba(167,139,250,0.2); }
+  .cta-green {
+    background: var(--green); color: var(--white);
+  }
+  .cta-green:hover { opacity: 0.9; }
+  .cta-purple {
+    background: var(--purple); color: var(--white);
+  }
+  .cta-purple:hover { opacity: 0.9; }
 
-  /* ---- FEATURES ---- */
-  .features-grid {
-    display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+  /* ---- BENTO FEATURES ---- */
+  .bento { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .bento-card {
+    background: var(--white); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 32px;
+    transition: box-shadow 0.3s;
   }
-  .feature {
-    background: var(--bg-card); border: 1px solid var(--border);
-    border-radius: var(--radius); padding: 28px;
-    transition: border-color 0.3s;
-  }
-  .feature:hover { border-color: var(--border-hover); }
-  .feature-icon {
-    width: 40px; height: 40px; border-radius: var(--radius-sm);
+  .bento-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.05); }
+  .bento-card.wide { grid-column: span 2; }
+  .bento-icon {
+    width: 44px; height: 44px; border-radius: var(--radius-sm);
     display: flex; align-items: center; justify-content: center;
-    font-size: 18px; margin-bottom: 16px;
+    font-size: 20px; margin-bottom: 20px;
   }
-  .feature-icon.gold { background: var(--accent-glow); }
-  .feature-icon.green { background: var(--green-muted); }
-  .feature-icon.purple { background: var(--purple-muted); }
-  .feature h4 {
-    font-size: 16px; font-weight: 700; margin-bottom: 8px;
-    letter-spacing: -0.3px;
+  .bento-icon-warm { background: var(--accent-light); }
+  .bento-icon-green { background: var(--green-light); }
+  .bento-icon-purple { background: var(--purple-light); }
+  .bento-card h4 {
+    font-size: 17px; font-weight: 700; margin-bottom: 8px;
   }
-  .feature p { font-size: 13px; color: var(--text-muted); line-height: 1.5; }
+  .bento-card p {
+    font-size: 14px; color: var(--text-secondary); line-height: 1.6;
+  }
 
   /* ---- PRESETS ---- */
-  .presets-grid {
-    display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
+  .presets-section { border-top: 1px solid var(--border); }
+  .presets-header {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 64px;
+    align-items: end; margin-bottom: 48px;
   }
-  .preset {
-    background: var(--bg-card); border: 1px solid var(--border);
-    border-radius: var(--radius-sm); padding: 20px;
-    transition: border-color 0.3s, background 0.3s; cursor: default;
+  .presets-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .preset-card {
+    background: var(--white); border: 1px solid var(--border);
+    border-radius: var(--radius-sm); padding: 24px;
+    transition: box-shadow 0.3s;
   }
-  .preset:hover { border-color: var(--border-hover); background: var(--bg-card-hover); }
-  .preset-name { font-weight: 700; font-size: 15px; margin-bottom: 6px; }
-  .preset-detail { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
-  .preset-meta {
-    display: flex; gap: 12px; margin-top: 10px;
-    font-size: 11px; color: var(--text-muted);
-  }
-  .preset-meta span {
-    padding: 2px 8px; border-radius: 3px;
-    background: rgba(255,255,255,0.04);
+  .preset-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+  .preset-name { font-weight: 700; font-size: 15px; margin-bottom: 4px; }
+  .preset-desc { font-size: 13px; color: var(--text-muted); line-height: 1.5; margin-bottom: 12px; }
+  .preset-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+  .preset-tag {
+    padding: 3px 10px; border-radius: 100px; font-size: 11px;
+    font-weight: 500; background: var(--bg); color: var(--text-secondary);
+    border: 1px solid var(--border-light);
   }
 
-  /* ---- PROMPT SECTION ---- */
-  .prompt-section { text-align: center; padding: 80px 24px; }
-  .prompt-box {
-    max-width: 700px; margin: 0 auto; background: var(--bg-card);
-    border: 1px solid var(--border); border-radius: var(--radius);
-    padding: 40px; text-align: left; position: relative;
+  /* ---- PROMPT BLOCKS ---- */
+  .prompts-section { border-top: 1px solid var(--border); }
+  .prompt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .prompt-block {
+    background: var(--white); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 36px; position: relative;
   }
-  .prompt-box h3 { font-size: 20px; font-weight: 700; margin-bottom: 8px; }
-  .prompt-box p { font-size: 14px; color: var(--text-secondary); margin-bottom: 24px; }
+  .prompt-block h3 {
+    font-family: var(--serif); font-size: 22px; font-weight: 400;
+    margin-bottom: 6px;
+  }
+  .prompt-block > p {
+    font-size: 14px; color: var(--text-secondary); margin-bottom: 20px;
+  }
   .prompt-text {
-    background: #0d0d14; border-radius: var(--radius-sm);
+    background: var(--bg); border-radius: var(--radius-sm);
     padding: 20px; font-family: 'SF Mono', 'Fira Code', monospace;
-    font-size: 13px; color: var(--text-secondary); line-height: 1.6;
-    max-height: 200px; overflow-y: auto; margin-bottom: 20px;
-    border: 1px solid var(--border);
+    font-size: 12px; color: var(--text-secondary); line-height: 1.65;
+    max-height: 220px; overflow-y: auto; margin-bottom: 20px;
+    border: 1px solid var(--border-light);
   }
   .copy-btn {
-    background: var(--accent); color: var(--bg-dark); padding: 10px 24px;
-    border-radius: 6px; font-weight: 600; font-size: 14px;
+    background: var(--bg-dark); color: var(--white); padding: 10px 24px;
+    border-radius: 100px; font-weight: 600; font-size: 13px;
     border: none; cursor: pointer; transition: all 0.2s;
+    font-family: var(--sans);
   }
-  .copy-btn:hover { background: var(--accent-hover); }
+  .copy-btn:hover { opacity: 0.85; }
   .copy-btn.copied { background: var(--green); }
+
+  /* ---- CTA BAND ---- */
+  .cta-band {
+    margin: 0 48px 80px; background: var(--bg-dark); border-radius: var(--radius);
+    padding: 64px; display: flex; align-items: center;
+    justify-content: space-between; gap: 40px;
+  }
+  .cta-band h2 {
+    font-family: var(--serif); font-size: 36px; font-weight: 400;
+    color: var(--white); line-height: 1.2;
+  }
+  .cta-band p {
+    color: #a09888; font-size: 15px; margin-top: 8px;
+  }
+  .cta-band .btn-accent {
+    background: var(--accent); color: var(--white); padding: 14px 32px;
+    border-radius: 100px; font-weight: 600; font-size: 15px;
+    text-decoration: none; transition: background 0.2s; white-space: nowrap;
+  }
+  .cta-band .btn-accent:hover { background: var(--accent-hover); }
 
   /* ---- FOOTER ---- */
   footer {
     border-top: 1px solid var(--border);
-    padding: 40px 24px; text-align: center;
+    padding: 32px 48px; display: flex;
+    justify-content: space-between; align-items: center;
   }
   footer p { font-size: 13px; color: var(--text-muted); }
   footer a { color: var(--text-secondary); text-decoration: none; }
-  footer a:hover { color: var(--text-primary); }
+  footer a:hover { color: var(--text); }
+  .footer-links { display: flex; gap: 24px; }
+  .footer-links a { font-size: 13px; }
 
   /* ---- RESPONSIVE ---- */
-  @media (max-width: 768px) {
-    nav { padding: 12px 20px; }
+  @media (max-width: 900px) {
+    nav { padding: 0 24px; }
     .nav-links { display: none; }
+    .wrap { padding: 0 24px; }
+    .hero { grid-template-columns: 1fr; gap: 40px; padding: 48px 0 40px; }
+    .hero h1 { font-size: 40px; }
     .paths-grid { grid-template-columns: 1fr; }
-    .features-grid { grid-template-columns: 1fr; }
+    .bento { grid-template-columns: 1fr; }
+    .bento-card.wide { grid-column: span 1; }
+    .presets-header { grid-template-columns: 1fr; gap: 16px; }
     .presets-grid { grid-template-columns: 1fr 1fr; }
-    .hero-stats { gap: 32px; }
-    section { padding: 60px 20px; }
-    .path-card { padding: 28px; }
+    .prompt-grid { grid-template-columns: 1fr; }
+    .stats-grid { grid-template-columns: 1fr; gap: 32px; }
+    .cta-band { margin: 0 24px 48px; padding: 40px; flex-direction: column; text-align: center; }
+    footer { flex-direction: column; gap: 16px; text-align: center; padding: 32px 24px; }
   }
-  @media (max-width: 480px) {
+  @media (max-width: 540px) {
     .presets-grid { grid-template-columns: 1fr; }
-    .hero-stats { flex-direction: column; gap: 16px; }
     .hero-buttons { flex-direction: column; }
-    .btn-primary, .btn-secondary { width: 100%; text-align: center; }
+    .section-title { font-size: 30px; }
   }
 
-  /* ---- ANIMATIONS ---- */
-  .fade-in {
-    opacity: 0; transform: translateY(20px);
-    transition: opacity 0.6s ease, transform 0.6s ease;
+  /* ---- ANIMATION ---- */
+  .fade-up {
+    opacity: 0; transform: translateY(24px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
   }
-  .fade-in.visible { opacity: 1; transform: translateY(0); }
+  .fade-up.vis { opacity: 1; transform: translateY(0); }
 </style>
 </head>
 <body>
 
 <!-- NAV -->
 <nav>
-  <div class="nav-logo">Seth</div>
-  <div class="nav-links">
-    <a href="#how-it-works">How It Works</a>
-    <a href="#get-started">Get Started</a>
-    <a href="#features">Features</a>
-    <a href="#presets">Industries</a>
+  <div class="nav-left">
+    <a href="#" class="nav-logo">Seth</a>
+    <div class="nav-links">
+      <a href="#how-it-works">How It Works</a>
+      <a href="#get-started">Get Started</a>
+      <a href="#features">Features</a>
+      <a href="#industries">Industries</a>
+    </div>
   </div>
-  <a href="#get-started" class="nav-cta">Start Selling</a>
+  <div class="nav-right">
+    <a href="https://github.com/abhiramelf/ai-sales-team-claude" class="nav-link-right">GitHub</a>
+    <a href="#get-started" class="btn-dark">Get Started</a>
+  </div>
 </nav>
 
 <!-- HERO -->
-<section class="hero">
-  <div class="hero-badge">21 skills &middot; 9 industry presets &middot; 5 parallel agents</div>
-  <h1>Meet <span>Seth</span></h1>
-  <p class="hero-sub">Your AI-powered sales team. Research prospects, qualify leads, write outreach, prep for meetings, and close deals &mdash; powered by Claude.</p>
-  <div class="hero-buttons">
-    <a href="#get-started" class="btn-primary">Get Started Free</a>
-    <a href="#how-it-works" class="btn-secondary">See It In Action</a>
-  </div>
-  <div class="hero-stats">
-    <div class="hero-stat">
-      <div class="hero-stat-num">21</div>
-      <div class="hero-stat-label">Sales Skills</div>
-    </div>
-    <div class="hero-stat">
-      <div class="hero-stat-num">9</div>
-      <div class="hero-stat-label">Industry Presets</div>
-    </div>
-    <div class="hero-stat">
-      <div class="hero-stat-num">&lt;5 min</div>
-      <div class="hero-stat-label">Setup Time</div>
-    </div>
-  </div>
-</section>
-
-<!-- DEMO -->
-<div class="demo" id="how-it-works">
-  <div class="demo-inner fade-in">
-    <div style="text-align:center;margin-bottom:40px;">
-      <div class="section-label">See It In Action</div>
-      <div class="section-title">One command. Full intelligence.</div>
-    </div>
-    <div class="terminal">
-      <div class="terminal-bar">
-        <div class="terminal-dot"></div>
-        <div class="terminal-dot"></div>
-        <div class="terminal-dot"></div>
-        <span class="terminal-title">Claude Code</span>
+<div class="wrap">
+  <div class="hero fade-up" id="how-it-works">
+    <div class="hero-text">
+      <div class="hero-badge">
+        <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.75.75 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z"/></svg>
+        21 skills &middot; 9 industries &middot; 5 parallel agents
       </div>
-      <div class="terminal-body" id="typed-terminal">
-        <div><span class="t-prompt">&gt; </span><span class="t-cmd" id="typed-cmd"></span><span id="cursor" style="color:var(--accent)">|</span></div>
-        <div id="terminal-output" style="display:none">
+      <h1>Close more deals<br>with your AI<br>sales team</h1>
+      <p class="hero-desc">Research any company, qualify leads, map decision makers, generate personalized outreach, and prep for meetings &mdash; all powered by Claude. Works across every industry.</p>
+      <div class="hero-buttons">
+        <a href="#get-started" class="btn-dark">Get Started &mdash; Free</a>
+        <a href="#features" class="btn-outline">See Features</a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="terminal">
+        <div class="terminal-bar">
+          <div class="terminal-dot"></div>
+          <div class="terminal-dot"></div>
+          <div class="terminal-dot"></div>
+        </div>
+        <div class="terminal-body">
+          <div><span class="t-prompt">&gt; </span><span class="t-cmd" id="typed-cmd"></span><span id="cursor" style="color:#e8c36e">|</span></div>
+          <div id="terminal-output" style="display:none">
 <br><span class="t-dim">Launching 5 parallel agents...</span>
-<br><span class="t-ok">&nbsp;&nbsp;&#10003;</span> <span class="t-dim">Company Research &amp; Firmographics</span> <span class="t-dim">&mdash; Fit Score:</span> <span class="t-accent">82/100</span>
-<br><span class="t-ok">&nbsp;&nbsp;&#10003;</span> <span class="t-dim">Decision Maker Identification</span> <span class="t-dim">&mdash;</span> <span class="t-accent">4 contacts found</span>
-<br><span class="t-ok">&nbsp;&nbsp;&#10003;</span> <span class="t-dim">Opportunity Assessment (BANT)</span> <span class="t-dim">&mdash; Score:</span> <span class="t-accent">78/100</span>
-<br><span class="t-ok">&nbsp;&nbsp;&#10003;</span> <span class="t-dim">Competitive Intelligence</span> <span class="t-dim">&mdash;</span> <span class="t-accent">3 competitors mapped</span>
-<br><span class="t-ok">&nbsp;&nbsp;&#10003;</span> <span class="t-dim">Outreach Strategy &amp; Messaging</span> <span class="t-dim">&mdash;</span> <span class="t-accent">5-email sequence ready</span>
+<br><span class="t-ok">&nbsp;&nbsp;&#10003;</span> <span class="t-dim">Company Research</span>&nbsp;&nbsp;&nbsp;<span class="t-hi">Fit: 82/100</span>
+<br><span class="t-ok">&nbsp;&nbsp;&#10003;</span> <span class="t-dim">Decision Makers</span>&nbsp;&nbsp;&nbsp;<span class="t-hi">4 contacts</span>
+<br><span class="t-ok">&nbsp;&nbsp;&#10003;</span> <span class="t-dim">Opportunity (BANT)</span>&nbsp;<span class="t-hi">Score: 78</span>
+<br><span class="t-ok">&nbsp;&nbsp;&#10003;</span> <span class="t-dim">Competitive Intel</span>&nbsp;&nbsp;<span class="t-hi">3 mapped</span>
+<br><span class="t-ok">&nbsp;&nbsp;&#10003;</span> <span class="t-dim">Outreach Strategy</span>&nbsp;<span class="t-hi">5 emails ready</span>
 <br>
-<br><span class="t-dim">&nbsp;&nbsp;PROSPECT SCORE</span>
-<br><span class="t-dim">&nbsp;&nbsp;</span><span class="t-bar-fill">&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;</span><span class="t-bar-empty">&#9608;&#9608;&#9608;</span><span class="t-accent"> &nbsp;85/100</span>
-<br><span class="t-dim">&nbsp;&nbsp;Grade:</span> <span class="t-accent">A</span> <span class="t-dim">&mdash; Strong Prospect</span>
+<br><span class="t-dim">&nbsp;&nbsp;</span><span class="t-bar">&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;</span><span class="t-bar-e">&#9608;&#9608;&#9608;</span>&nbsp;<span class="t-hi">85/100</span>
+<br><span class="t-dim">&nbsp;&nbsp;Grade: </span><span class="t-hi">A</span><span class="t-dim"> &mdash; Strong Prospect</span>
 <br>
-<br><span class="t-ok">Full analysis saved to PROSPECT-ANALYSIS.md</span>
+<br><span class="t-ok">&#10003; Saved to PROSPECT-ANALYSIS.md</span>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- GET STARTED / TWO PATHS -->
-<section id="get-started">
-  <div style="text-align:center;margin-bottom:48px;" class="fade-in">
-    <div class="section-label">Get Started</div>
-    <div class="section-title">Pick your path</div>
-    <p class="section-desc" style="margin:12px auto 0">No coding required either way. Choose what fits your workflow.</p>
-  </div>
-  <div class="paths-grid fade-in">
-    <!-- Path A -->
-    <div class="path-card easy">
-      <span class="path-tag easy">Recommended</span>
-      <h3>Claude Projects</h3>
-      <p>Use Seth inside Claude's web or desktop app. Paste one prompt and start chatting. Nothing to install.</p>
-      <ol class="steps">
-        <li><span class="step-num">1</span> Open <strong>claude.ai</strong> and go to Projects</li>
-        <li><span class="step-num">2</span> Create a new project called <strong>"Seth"</strong></li>
-        <li><span class="step-num">3</span> Click <strong>"Set custom instructions"</strong></li>
-        <li><span class="step-num">4</span> Paste the prompt below and save</li>
-        <li><span class="step-num">5</span> Start a chat: <strong>"Let's set up my sales team"</strong></li>
-      </ol>
-      <a href="#prompt-projects" class="path-cta easy-cta">Copy the Prompt &darr;</a>
-    </div>
-    <!-- Path B -->
-    <div class="path-card power">
-      <span class="path-tag power">Power User</span>
-      <h3>Claude Code</h3>
-      <p>Full-featured CLI experience with file output, parallel agents, PDF reports, and persistent pipeline tracking.</p>
-      <ol class="steps">
-        <li><span class="step-num">1</span> Open <strong>Claude Code</strong> in your terminal</li>
-        <li><span class="step-num">2</span> Paste the onboarding prompt below</li>
-        <li><span class="step-num">3</span> Claude clones, installs, and sets up for you</li>
-        <li><span class="step-num">4</span> Answer 10 questions about your business</li>
-        <li><span class="step-num">5</span> Start prospecting with <strong>/sales prospect</strong></li>
-      </ol>
-      <a href="#prompt-code" class="path-cta power-cta">Copy the Prompt &darr;</a>
+<!-- STATS -->
+<div class="stats-strip fade-up">
+  <div class="wrap">
+    <div class="stats-grid">
+      <div class="stat">
+        <div class="stat-num">21</div>
+        <div class="stat-label">Sales Skills</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">9</div>
+        <div class="stat-label">Industry Presets</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">&lt;5 min</div>
+        <div class="stat-label">Setup Time</div>
+      </div>
     </div>
   </div>
-</section>
+</div>
 
-<!-- FEATURES -->
-<section id="features">
-  <div class="fade-in">
-    <div class="section-label">Capabilities</div>
-    <div class="section-title">Everything your sales team needs</div>
-    <p class="section-desc">21 skills that cover every stage of your sales process &mdash; from first research to closed deal.</p>
-  </div>
-  <div class="features-grid fade-in">
-    <div class="feature">
-      <div class="feature-icon gold">&#128269;</div>
-      <h4>Prospect Research</h4>
-      <p>5 parallel agents analyze company fit, contacts, opportunity, competition, and outreach readiness. Score 0-100.</p>
+<!-- GET STARTED -->
+<div class="wrap">
+  <section class="section paths-section" id="get-started">
+    <div class="section-top fade-up">
+      <span class="pill pill-accent">Get Started</span>
+      <div class="section-title">Pick how you want<br>to work</div>
+      <p class="section-desc">No coding required either way. One is paste-and-chat, the other gives you the full toolkit.</p>
     </div>
-    <div class="feature">
-      <div class="feature-icon green">&#9745;</div>
-      <h4>Lead Qualification</h4>
-      <p>BANT, MEDDIC, SPICED &mdash; or your custom framework. Calibrated to your deal size and industry.</p>
+    <div class="paths-grid fade-up">
+      <!-- PROJECTS -->
+      <div class="path-card">
+        <span class="pill pill-green">Recommended</span>
+        <h3>Claude Projects</h3>
+        <p>Use Seth inside Claude's web or desktop app. Paste one prompt and start chatting. Nothing to install.</p>
+        <ol class="steps">
+          <li><span class="step-num step-num-green">1</span> Open <strong>claude.ai</strong> and go to Projects</li>
+          <li><span class="step-num step-num-green">2</span> Create a new project called <strong>"Seth"</strong></li>
+          <li><span class="step-num step-num-green">3</span> Paste the prompt into custom instructions</li>
+          <li><span class="step-num step-num-green">4</span> Start a chat: <strong>"Let's set up my sales team"</strong></li>
+        </ol>
+        <a href="#prompts" class="path-cta cta-green">Copy the Prompt &darr;</a>
+      </div>
+      <!-- CODE -->
+      <div class="path-card">
+        <span class="pill pill-purple">Power User</span>
+        <h3>Claude Code</h3>
+        <p>Full CLI experience with file output, 5 parallel agents, PDF reports, and persistent pipeline tracking.</p>
+        <ol class="steps">
+          <li><span class="step-num step-num-purple">1</span> Open <strong>Claude Code</strong> in your terminal</li>
+          <li><span class="step-num step-num-purple">2</span> Paste the onboarding prompt</li>
+          <li><span class="step-num step-num-purple">3</span> Claude clones, installs, and sets up for you</li>
+          <li><span class="step-num step-num-purple">4</span> Answer 10 questions and start prospecting</li>
+        </ol>
+        <a href="#prompts" class="path-cta cta-purple">Copy the Prompt &darr;</a>
+      </div>
     </div>
-    <div class="feature">
-      <div class="feature-icon purple">&#128101;</div>
-      <h4>Decision Maker Mapping</h4>
-      <p>Find the buying committee, map the org chart, and get personalization anchors for each contact.</p>
+  </section>
+</div>
+
+<!-- FEATURES BENTO -->
+<div class="wrap">
+  <section class="section" id="features" style="border-top:1px solid var(--border)">
+    <div class="section-top fade-up">
+      <span class="pill pill-accent">Capabilities</span>
+      <div class="section-title">Everything your<br>sales team needs</div>
+      <p class="section-desc">21 skills that cover every stage &mdash; from first research to closed deal.</p>
     </div>
-    <div class="feature">
-      <div class="feature-icon gold">&#9993;</div>
-      <h4>Outreach Generation</h4>
-      <p>Copy-paste-ready email sequences tailored to your product, proof points, and the prospect's pain.</p>
+    <div class="bento fade-up">
+      <div class="bento-card wide">
+        <div class="bento-icon bento-icon-warm">&#128269;</div>
+        <h4>Full Prospect Analysis</h4>
+        <p>5 parallel agents analyze company fit, contacts, opportunity quality, competitive position, and outreach readiness simultaneously. Produces a scored report with a ready-to-send first email.</p>
+      </div>
+      <div class="bento-card">
+        <div class="bento-icon bento-icon-green">&#9745;</div>
+        <h4>Lead Qualification</h4>
+        <p>BANT, MEDDIC, SPICED, or your custom framework. Calibrated to your deal size.</p>
+      </div>
+      <div class="bento-card">
+        <div class="bento-icon bento-icon-purple">&#128101;</div>
+        <h4>Decision Makers</h4>
+        <p>Map the buying committee with personalization anchors for every contact.</p>
+      </div>
+      <div class="bento-card wide">
+        <div class="bento-icon bento-icon-green">&#9993;</div>
+        <h4>Outreach &amp; Follow-Up Sequences</h4>
+        <p>Copy-paste-ready email sequences personalized with your product, differentiators, and proof points. 5-email cold sequences, warm intros, referral templates, and follow-up cadences &mdash; all tailored to your industry's tone and sales cycle.</p>
+      </div>
+      <div class="bento-card">
+        <div class="bento-icon bento-icon-warm">&#128170;</div>
+        <h4>Objection Handling</h4>
+        <p>Word-for-word responses pre-loaded with your industry's common pushbacks.</p>
+      </div>
+      <div class="bento-card">
+        <div class="bento-icon bento-icon-purple">&#128203;</div>
+        <h4>Meeting Prep</h4>
+        <p>Attendee profiles, talking points, discovery questions, and a cheat sheet.</p>
+      </div>
+      <div class="bento-card">
+        <div class="bento-icon bento-icon-green">&#128196;</div>
+        <h4>Proposals</h4>
+        <p>Auto-structured by your pricing model &mdash; subscription, retainer, project, or one-time.</p>
+      </div>
+      <div class="bento-card">
+        <div class="bento-icon bento-icon-warm">&#127942;</div>
+        <h4>Sales Coaching</h4>
+        <p>Paste a transcript, get scored on 6 dimensions with specific improvement scripts.</p>
+      </div>
+      <div class="bento-card">
+        <div class="bento-icon bento-icon-purple">&#128218;</div>
+        <h4>Sales Playbook</h4>
+        <p>One command generates your complete playbook &mdash; ICP, battle cards, sequences, and closing.</p>
+      </div>
     </div>
-    <div class="feature">
-      <div class="feature-icon green">&#128203;</div>
-      <h4>Meeting Prep</h4>
-      <p>Attendee profiles, talking points, discovery questions, objection responses, and a one-page cheat sheet.</p>
-    </div>
-    <div class="feature">
-      <div class="feature-icon purple">&#128196;</div>
-      <h4>Proposals</h4>
-      <p>Subscription, retainer, project-based, or one-time &mdash; auto-structured from your pricing model.</p>
-    </div>
-    <div class="feature">
-      <div class="feature-icon gold">&#128170;</div>
-      <h4>Objection Handling</h4>
-      <p>Word-for-word responses using your differentiators. Pre-loaded with your industry's common pushbacks.</p>
-    </div>
-    <div class="feature">
-      <div class="feature-icon green">&#127942;</div>
-      <h4>Sales Coaching</h4>
-      <p>Paste a transcript, get scored on 6 dimensions with specific "instead of X, try Y" feedback.</p>
-    </div>
-    <div class="feature">
-      <div class="feature-icon purple">&#128218;</div>
-      <h4>Sales Playbook</h4>
-      <p>One command generates your complete playbook &mdash; ICP, messaging, sequences, battle cards, and closing techniques.</p>
-    </div>
-  </div>
-</section>
+  </section>
+</div>
 
 <!-- INDUSTRY PRESETS -->
-<section id="presets">
-  <div class="fade-in">
-    <div class="section-label">Industry Presets</div>
-    <div class="section-title">Calibrated for your world</div>
-    <p class="section-desc">Pick your industry and Seth pre-configures scoring weights, decision maker roles, objection responses, and sales process.</p>
-  </div>
-  <div class="presets-grid fade-in">
-    <div class="preset">
-      <div class="preset-name">SaaS / Software</div>
-      <div class="preset-detail">Product-led sales with technical evaluation cycles</div>
-      <div class="preset-meta"><span>4-12 wk cycle</span><span>BANT + MEDDIC</span></div>
+<div class="wrap">
+  <section class="section presets-section" id="industries">
+    <div class="presets-header fade-up">
+      <div>
+        <span class="pill pill-accent">Industries</span>
+        <div class="section-title">Calibrated for<br>your world</div>
+      </div>
+      <p class="section-desc" style="margin-top:0">Pick your industry and Seth pre-configures scoring weights, decision maker roles, qualification framework, objection responses, and sales process.</p>
     </div>
-    <div class="preset">
-      <div class="preset-name">Agency / Services</div>
-      <div class="preset-detail">Relationship-driven with portfolio proof points</div>
-      <div class="preset-meta"><span>2-6 wk cycle</span><span>Retainer model</span></div>
+    <div class="presets-grid fade-up">
+      <div class="preset-card">
+        <div class="preset-name">SaaS / Software</div>
+        <div class="preset-desc">Product-led sales with technical evaluation cycles</div>
+        <div class="preset-tags"><span class="preset-tag">4-12 wk cycle</span><span class="preset-tag">BANT + MEDDIC</span></div>
+      </div>
+      <div class="preset-card">
+        <div class="preset-name">Agency / Services</div>
+        <div class="preset-desc">Relationship-driven with portfolio proof points</div>
+        <div class="preset-tags"><span class="preset-tag">2-6 wk cycle</span><span class="preset-tag">Retainer</span></div>
+      </div>
+      <div class="preset-card">
+        <div class="preset-name">Consulting</div>
+        <div class="preset-desc">Expertise-led engagements with C-suite access</div>
+        <div class="preset-tags"><span class="preset-tag">4-16 wk cycle</span><span class="preset-tag">MEDDIC</span></div>
+      </div>
+      <div class="preset-card">
+        <div class="preset-name">E-commerce / Retail</div>
+        <div class="preset-desc">Revenue-focused with seasonal buying patterns</div>
+        <div class="preset-tags"><span class="preset-tag">2-8 wk cycle</span><span class="preset-tag">Revenue-based</span></div>
+      </div>
+      <div class="preset-card">
+        <div class="preset-name">Healthcare</div>
+        <div class="preset-desc">Compliance-first with extended evaluation</div>
+        <div class="preset-tags"><span class="preset-tag">12-36 wk</span><span class="preset-tag">HIPAA aware</span></div>
+      </div>
+      <div class="preset-card">
+        <div class="preset-name">Manufacturing</div>
+        <div class="preset-desc">Capital budget cycles with production focus</div>
+        <div class="preset-tags"><span class="preset-tag">8-24 wk</span><span class="preset-tag">Budget-aligned</span></div>
+      </div>
+      <div class="preset-card">
+        <div class="preset-name">Real Estate</div>
+        <div class="preset-desc">Deal-flow focused with relationship networks</div>
+        <div class="preset-tags"><span class="preset-tag">4-12 wk</span><span class="preset-tag">Relationship</span></div>
+      </div>
+      <div class="preset-card">
+        <div class="preset-name">Financial Services</div>
+        <div class="preset-desc">Trust-building with regulatory compliance gates</div>
+        <div class="preset-tags"><span class="preset-tag">12-24 wk</span><span class="preset-tag">SOC 2</span></div>
+      </div>
+      <div class="preset-card">
+        <div class="preset-name">Education</div>
+        <div class="preset-desc">Fiscal year budgets with pilot program paths</div>
+        <div class="preset-tags"><span class="preset-tag">8-24 wk</span><span class="preset-tag">FERPA</span></div>
+      </div>
     </div>
-    <div class="preset">
-      <div class="preset-name">Consulting</div>
-      <div class="preset-detail">Expertise-led engagements with C-suite access</div>
-      <div class="preset-meta"><span>4-16 wk cycle</span><span>MEDDIC focus</span></div>
-    </div>
-    <div class="preset">
-      <div class="preset-name">E-commerce / Retail</div>
-      <div class="preset-detail">Revenue-focused with seasonal buying patterns</div>
-      <div class="preset-meta"><span>2-8 wk cycle</span><span>Revenue-based</span></div>
-    </div>
-    <div class="preset">
-      <div class="preset-name">Healthcare</div>
-      <div class="preset-detail">Compliance-first with extended evaluation</div>
-      <div class="preset-meta"><span>12-36 wk cycle</span><span>HIPAA aware</span></div>
-    </div>
-    <div class="preset">
-      <div class="preset-name">Manufacturing</div>
-      <div class="preset-detail">Capital budget cycles with production focus</div>
-      <div class="preset-meta"><span>8-24 wk cycle</span><span>Budget-aligned</span></div>
-    </div>
-    <div class="preset">
-      <div class="preset-name">Real Estate</div>
-      <div class="preset-detail">Deal-flow focused with relationship networks</div>
-      <div class="preset-meta"><span>4-12 wk cycle</span><span>Relationship-first</span></div>
-    </div>
-    <div class="preset">
-      <div class="preset-name">Financial Services</div>
-      <div class="preset-detail">Trust-building with regulatory compliance gates</div>
-      <div class="preset-meta"><span>12-24 wk cycle</span><span>SOC 2 / compliance</span></div>
-    </div>
-    <div class="preset">
-      <div class="preset-name">Education</div>
-      <div class="preset-detail">Fiscal year budgets with pilot program paths</div>
-      <div class="preset-meta"><span>8-24 wk cycle</span><span>FERPA aware</span></div>
-    </div>
-  </div>
-</section>
+  </section>
+</div>
 
-<!-- PROMPT: CLAUDE PROJECTS -->
-<section id="prompt-projects" class="prompt-section">
-  <div class="fade-in">
-    <div class="prompt-box">
-      <span class="path-tag easy" style="margin-bottom:16px">Claude Projects</span>
-      <h3>System Prompt</h3>
-      <p>Copy this and paste it into your Claude Project's custom instructions.</p>
-      <div class="prompt-text" id="projects-prompt-text">You are an AI Sales Team — a comprehensive sales intelligence and outreach system. You help founders, sales teams, agency owners, and solopreneurs research prospects, qualify leads, identify decision makers, generate personalized outreach, prepare for meetings, handle objections, and build winning proposals.
+<!-- PROMPT COPY BLOCKS -->
+<div class="wrap">
+  <section class="section prompts-section" id="prompts">
+    <div class="section-top fade-up">
+      <span class="pill pill-accent">Prompts</span>
+      <div class="section-title">Copy, paste, sell</div>
+      <p class="section-desc">One prompt is all it takes. Pick your path, copy the prompt, and you're in business.</p>
+    </div>
+    <div class="prompt-grid fade-up">
+      <!-- PROJECTS PROMPT -->
+      <div class="prompt-block">
+        <span class="pill pill-green">Claude Projects</span>
+        <h3>System Prompt</h3>
+        <p>Paste into your Claude Project's custom instructions.</p>
+        <div class="prompt-text" id="projects-prompt-text">You are an AI Sales Team — a comprehensive sales intelligence and outreach system. You help founders, sales teams, agency owners, and solopreneurs research prospects, qualify leads, identify decision makers, generate personalized outreach, prepare for meetings, handle objections, and build winning proposals.
 
 You adapt to any industry, product, or service. On the user's first conversation, run a quick setup to learn about their business (10 questions: what they sell, industry, pricing, differentiators, ideal customer, decision makers, pain points, sales process, their name/company, and any extra context like competitors). After that, every response is tailored.
 
@@ -568,19 +624,14 @@ Core capabilities: (1) Prospect Research — score 0-100 across Company Fit, Con
 Industry presets available: SaaS (25/20/20/15/20 weights, 4-12wk), Agency (20/25/20/15/20, 2-6wk), Consulting (20/20/25/15/20, 4-16wk), E-commerce (30/15/20/15/20, 2-8wk), Healthcare (20/20/20/20/20, 12-36wk), Manufacturing (25/20/25/10/20, 8-24wk), Real Estate (20/25/15/15/25, 4-12wk), Financial Services (20/20/20/20/20, 12-24wk), Education (25/15/25/10/25, 8-24wk).
 
 Rules: Never fabricate data. Always use the user's context. Score honestly. Emails must feel human. Prioritize highest-impact actions. Remember context across conversations.</div>
-      <button class="copy-btn" onclick="copyPrompt('projects-prompt-text', this)">Copy to Clipboard</button>
-    </div>
-  </div>
-</section>
-
-<!-- PROMPT: CLAUDE CODE -->
-<section id="prompt-code" class="prompt-section" style="padding-top:0">
-  <div class="fade-in">
-    <div class="prompt-box">
-      <span class="path-tag power" style="margin-bottom:16px">Claude Code</span>
-      <h3>Onboarding Prompt</h3>
-      <p>Open Claude Code, then paste this as your first message. Claude handles everything.</p>
-      <div class="prompt-text" id="code-prompt-text">I want to set up the AI Sales Team for Claude Code. I'm not technical — please guide me through every step. Here's what I need you to do:
+        <button class="copy-btn" onclick="copyPrompt('projects-prompt-text', this)">Copy to Clipboard</button>
+      </div>
+      <!-- CODE PROMPT -->
+      <div class="prompt-block">
+        <span class="pill pill-purple">Claude Code</span>
+        <h3>Onboarding Prompt</h3>
+        <p>Paste as your first message in Claude Code.</p>
+        <div class="prompt-text" id="code-prompt-text">I want to set up the AI Sales Team for Claude Code. I'm not technical — please guide me through every step. Here's what I need you to do:
 
 1. FIRST, clone the repository:
    Run: git clone https://github.com/abhiramelf/ai-sales-team-claude.git ~/ai-sales-team
@@ -598,29 +649,34 @@ Rules: Never fabricate data. Always use the user's context. Score honestly. Emai
 IMPORTANT RULES FOR THIS SESSION:
 - After EVERY action you take, tell me what just happened in plain English (no jargon)
 - Always end your response with "NEXT STEP:" followed by what I should do or say next
-- If something goes wrong, explain what happened and give me the exact fix — don't assume I know how to troubleshoot
+- If something goes wrong, explain what happened and give me the exact fix
 - If you need me to make a choice, give me numbered options and tell me which one you recommend
 - Use simple language — if you must use a technical term, explain it in parentheses
-- Never show me raw error output without explaining what it means
 
 Let's start!</div>
-      <button class="copy-btn" onclick="copyPrompt('code-prompt-text', this)">Copy to Clipboard</button>
+        <button class="copy-btn" onclick="copyPrompt('code-prompt-text', this)">Copy to Clipboard</button>
+      </div>
     </div>
+  </section>
+</div>
+
+<!-- CTA BAND -->
+<div class="cta-band fade-up">
+  <div>
+    <h2>Ready to close<br>more deals?</h2>
+    <p>Set up in under 5 minutes. No credit card, no sign-up.</p>
   </div>
-</section>
+  <a href="#get-started" class="btn-accent">Get Started &mdash; Free</a>
+</div>
 
 <!-- FOOTER -->
 <footer>
-  <p style="margin-bottom:8px"><strong style="color:var(--accent)">Seth</strong> &mdash; AI Sales Team for Claude</p>
-  <p>
-    <a href="https://github.com/abhiramelf/ai-sales-team-claude">GitHub</a> &nbsp;&middot;&nbsp;
-    <a href="https://github.com/abhiramelf/ai-sales-team-claude/blob/main/LICENSE">MIT License</a> &nbsp;&middot;&nbsp;
+  <p><strong>Seth</strong> &mdash; AI Sales Team for Claude &nbsp;&middot;&nbsp; MIT License</p>
+  <div class="footer-links">
+    <a href="https://github.com/abhiramelf/ai-sales-team-claude">GitHub</a>
     <a href="https://github.com/abhiramelf/ai-sales-team-claude/blob/main/GET-STARTED.md">Full Guide</a>
-  </p>
-  <p style="margin-top:12px;font-size:12px">
-    Originally created by <a href="https://github.com/zubair-trabzada">Zubair Trabzada</a>.
-    Adaptation framework by <a href="https://github.com/abhiramelf">abhiramelf</a>.
-  </p>
+    <a href="https://github.com/abhiramelf/ai-sales-team-claude/blob/main/LICENSE">License</a>
+  </div>
 </footer>
 
 <script>
@@ -630,43 +686,30 @@ let i = 0;
 const typedEl = document.getElementById('typed-cmd');
 const cursorEl = document.getElementById('cursor');
 const outputEl = document.getElementById('terminal-output');
-
 function typeChar() {
   if (i < cmd.length) {
-    typedEl.textContent += cmd[i];
-    i++;
-    setTimeout(typeChar, 40 + Math.random() * 40);
+    typedEl.textContent += cmd[i]; i++;
+    setTimeout(typeChar, 35 + Math.random() * 35);
   } else {
     cursorEl.style.display = 'none';
-    setTimeout(() => { outputEl.style.display = 'block'; }, 400);
+    setTimeout(() => { outputEl.style.display = 'block'; }, 300);
   }
 }
+setTimeout(typeChar, 800);
 
-// Intersection observer for fade-in and terminal trigger
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('visible');
-      if (entry.target.querySelector('#typed-terminal') && i === 0) {
-        setTimeout(typeChar, 600);
-      }
-      observer.unobserve(entry.target);
-    }
+// Scroll fade-in
+const obs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('vis'); obs.unobserve(e.target); }
   });
-}, { threshold: 0.2 });
+}, { threshold: 0.15 });
+document.querySelectorAll('.fade-up').forEach(el => obs.observe(el));
 
-document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
-
-// Copy prompt
+// Copy
 function copyPrompt(id, btn) {
-  const text = document.getElementById(id).innerText;
-  navigator.clipboard.writeText(text).then(() => {
-    btn.textContent = 'Copied!';
-    btn.classList.add('copied');
-    setTimeout(() => {
-      btn.textContent = 'Copy to Clipboard';
-      btn.classList.remove('copied');
-    }, 2000);
+  navigator.clipboard.writeText(document.getElementById(id).innerText).then(() => {
+    btn.textContent = 'Copied!'; btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copy to Clipboard'; btn.classList.remove('copied'); }, 2000);
   });
 }
 </script>
