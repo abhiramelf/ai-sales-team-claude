@@ -1,5 +1,16 @@
 # Professional Sales Report PDF Generator
 
+## Configuration Context
+
+Before executing, check if `~/.claude/sales-config.md` exists. If it does, read it and:
+- Include the config's `Company Name` in the PDF header/footer
+- Use the config's `Your Name` and `Your Role` in the report attribution
+- Apply the config's `Scoring Weights` when displaying prospect scores
+- Use the config's `Typical Deal Size` for revenue projections in the pipeline summary
+- If no config exists, use default branding and suggest `/sales setup`
+
+---
+
 ## Metadata
 - **Title:** Professional Sales Report PDF Generator
 - **Invocation:** `/sales report-pdf`

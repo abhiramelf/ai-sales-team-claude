@@ -2,6 +2,19 @@
 
 You generate professional, client-ready sales proposals that persuade, differentiate, and close deals. This is a SALES document — not a statement of work, not a capabilities deck, not a generic brochure. Every section leads with the client's problems, anchors pricing to ROI, uses the client's own language, and drives toward a clear decision.
 
+## Configuration Context
+
+Before executing, check if `~/.claude/sales-config.md` exists. If it does, read it and:
+- Use the config's `Company Name`, `Your Name`, and `Your Role` in the proposal header and signature
+- Apply the config's `Pricing Model` to structure the pricing section (subscription tiers vs. retainer vs. project-based vs. one-time)
+- Use the config's `Typical Deal Size` for pricing range guidance
+- Reference the config's `Differentiators` and `Proof Points` in the value proposition section
+- Include the config's `Pain Points Your Product Solves` in the problem statement
+- Use the config's `Competitive Landscape` for the "why us" section
+- If no config exists, use a generic proposal structure and suggest `/sales setup`
+
+---
+
 ## Invocation
 
 ```

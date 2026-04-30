@@ -7,19 +7,67 @@ Usage:
     python3 lead_scorer.py <input.json>
     cat input.json | python3 lead_scorer.py
     python3 lead_scorer.py --help
+
+Config support:
+    --config <path>     Path to JSON config file (e.g. ~/.claude/sales-config.json).
+                        Reads "scoring_weights" key for custom BANT weights.
+    --weights <w1,w2,w3,w4,w5>  Comma-separated weight override (budget,authority,need,timeline,meddic).
+    Defaults: 25,20,20,15,20 when no config/weights provided.
 """
 
 import argparse
 import json
 import math
+import os
 import sys
 
 # ---------------------------------------------------------------------------
-# BANT Scoring (each dimension 0-25, total 0-100)
+# Default BANT weights: budget, authority, need, timeline (must sum to 100)
+# ---------------------------------------------------------------------------
+DEFAULT_WEIGHTS = [25, 20, 20, 15, 20]
+
+
+def load_config(config_path):
+    """Load a JSON config file and return the parsed dict, or {} on failure."""
+    if not config_path:
+        return {}
+    path = os.path.expanduser(config_path)
+    if not os.path.isfile(path):
+        print(f"Warning: Config file not found: {path}", file=sys.stderr)
+        return {}
+    try:
+        with open(path, "r") as f:
+            return json.load(f)
+    except (json.JSONDecodeError, OSError) as exc:
+        print(f"Warning: Could not read config {path}: {exc}", file=sys.stderr)
+        return {}
+
+
+def resolve_weights(args):
+    """Resolve scoring weights from --weights flag, --config file, or defaults.
+
+    Returns a list of 5 integers: [budget, authority, need, timeline, meddic_weight].
+    """
+    if args.weights:
+        parts = [int(x.strip()) for x in args.weights.split(",")]
+        if len(parts) != 5:
+            print("Error: --weights must be exactly 5 comma-separated integers.", file=sys.stderr)
+            sys.exit(1)
+        return parts
+    if args.config:
+        cfg = load_config(args.config)
+        cfg_weights = cfg.get("scoring_weights")
+        if cfg_weights and isinstance(cfg_weights, list) and len(cfg_weights) == 5:
+            return [int(w) for w in cfg_weights]
+    return list(DEFAULT_WEIGHTS)
+
+
+# ---------------------------------------------------------------------------
+# BANT Scoring (each dimension scored 0-max_score)
 # ---------------------------------------------------------------------------
 
-def score_budget(signals):
-    """Score budget signals (0-25)."""
+def score_budget(signals, max_score=25):
+    """Score budget signals (0-max_score)."""
     score = 0
     funding = signals.get("funding_amount", 0)
     if funding >= 50_000_000:
@@ -51,11 +99,11 @@ def score_budget(signals):
     tech_spend = signals.get("tech_spend_indicators", [])
     score += min(len(tech_spend) * 2, 7)
 
-    return min(score, 25)
+    return min(score, max_score)
 
 
-def score_authority(signals):
-    """Score authority signals (0-25)."""
+def score_authority(signals, max_score=25):
+    """Score authority signals (0-max_score)."""
     score = 0
     dm_count = signals.get("decision_makers_found", 0)
     if dm_count >= 5:
@@ -73,11 +121,11 @@ def score_authority(signals):
     elif dm_count > 1:
         score += 3
 
-    return min(score, 25)
+    return min(score, max_score)
 
 
-def score_need(signals):
-    """Score need signals (0-25)."""
+def score_need(signals, max_score=25):
+    """Score need signals (0-max_score)."""
     score = 0
     pain_points = signals.get("pain_points_detected", 0)
     if pain_points >= 5:
@@ -99,11 +147,11 @@ def score_need(signals):
     elif complaints >= 1:
         score += 4
 
-    return min(score, 25)
+    return min(score, max_score)
 
 
-def score_timeline(signals):
-    """Score timeline signals (0-25)."""
+def score_timeline(signals, max_score=25):
+    """Score timeline signals (0-max_score)."""
     score = 0
     if signals.get("hiring_for_role"):
         score += 7
@@ -120,7 +168,7 @@ def score_timeline(signals):
     elif urgency >= 1:
         score += 3
 
-    return min(score, 25)
+    return min(score, max_score)
 
 
 # ---------------------------------------------------------------------------
@@ -252,17 +300,28 @@ def recommend_action(grade, meddic):
 # Main scoring pipeline
 # ---------------------------------------------------------------------------
 
-def score_lead(data):
-    """Run full BANT + MEDDIC scoring on input data."""
+def score_lead(data, weights=None):
+    """Run full BANT + MEDDIC scoring on input data.
+
+    Args:
+        data: Input data dict with budget/authority/need/timeline signals.
+        weights: Optional list of 5 ints [budget, authority, need, timeline, meddic].
+                 Falls back to DEFAULT_WEIGHTS if not provided.
+    """
+    if weights is None:
+        weights = list(DEFAULT_WEIGHTS)
+
+    w_budget, w_authority, w_need, w_timeline, _w_meddic = weights
+
     budget = data.get("budget_signals", {})
     authority = data.get("authority_signals", {})
     need = data.get("need_signals", {})
     timeline = data.get("timeline_signals", {})
 
-    b_score = score_budget(budget)
-    a_score = score_authority(authority)
-    n_score = score_need(need)
-    t_score = score_timeline(timeline)
+    b_score = score_budget(budget, max_score=w_budget)
+    a_score = score_authority(authority, max_score=w_authority)
+    n_score = score_need(need, max_score=w_need)
+    t_score = score_timeline(timeline, max_score=w_timeline)
     total = b_score + a_score + n_score + t_score
 
     grade = compute_grade(total)
@@ -274,10 +333,10 @@ def score_lead(data):
         "company": data.get("company", "Unknown"),
         "bant_score": total,
         "bant_breakdown": {
-            "budget": {"score": b_score, "max": 25},
-            "authority": {"score": a_score, "max": 25},
-            "need": {"score": n_score, "max": 25},
-            "timeline": {"score": t_score, "max": 25},
+            "budget": {"score": b_score, "max": w_budget},
+            "authority": {"score": a_score, "max": w_authority},
+            "need": {"score": n_score, "max": w_need},
+            "timeline": {"score": t_score, "max": w_timeline},
         },
         "meddic_completeness": meddic,
         "lead_grade": grade,
@@ -296,7 +355,14 @@ def main():
         epilog="Example: python3 lead_scorer.py input.json",
     )
     parser.add_argument("input_file", nargs="?", help="Path to input JSON file (reads stdin if omitted)")
+    parser.add_argument("--config", default=None,
+                        help="Path to JSON config file (e.g. ~/.claude/sales-config.json)")
+    parser.add_argument("--weights", default=None,
+                        help="Comma-separated weight override: budget,authority,need,timeline,meddic (e.g. 25,20,20,15,20)")
     args = parser.parse_args()
+
+    # Resolve scoring weights from flags/config/defaults
+    weights = resolve_weights(args)
 
     if args.input_file:
         try:
@@ -319,7 +385,7 @@ def main():
             print(f"Error: Invalid JSON from stdin: {exc}", file=sys.stderr)
             sys.exit(1)
 
-    result = score_lead(data)
+    result = score_lead(data, weights=weights)
     print(json.dumps(result, indent=2, ensure_ascii=False))
 
 

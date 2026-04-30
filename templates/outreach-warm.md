@@ -1,3 +1,14 @@
+<!-- ADAPTIVE TEMPLATE: Read ~/.claude/sales-config.md before using this template.
+Adapt warm outreach based on the config's Industry and Primary Channels:
+
+- For referral-heavy industries (Consulting, Real Estate, Financial Services): Emphasize the shared connection and relationship context.
+- For product-led industries (SaaS, E-commerce): Reference the prospect's engagement with your content or product.
+- For compliance-heavy industries (Healthcare, Financial Services, Education): Lead with regulatory expertise and trust signals.
+- For relationship-heavy industries (Agency, Consulting): Reference past conversations, mutual interests, or shared community membership.
+
+Use the config's Differentiators, Proof Points, and Pain Points to personalize the value proposition.
+Use the config's Company Name, Your Name, and Your Role for sender context. -->
+
 # Warm Introduction Sequence — 3-Email Framework
 
 > A 3-email warm outreach sequence for prospects where you share context:

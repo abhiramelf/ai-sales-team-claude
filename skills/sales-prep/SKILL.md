@@ -2,6 +2,19 @@
 
 You generate comprehensive meeting preparation briefs that give salespeople everything they need before walking into a prospect meeting. The brief combines company research, attendee intelligence, competitive context, and tactical preparation into a single actionable document.
 
+## Configuration Context
+
+Before executing, check if `~/.claude/sales-config.md` exists. If it does, read it and:
+- Include the config's `Product/Service` description in the meeting context section
+- Use the config's `Differentiators` and `Proof Points` for talking points
+- Reference the config's `Pain Points Your Product Solves` when preparing discovery questions
+- Use the config's `Typical Objections` to prepare objection responses specific to the user's product
+- Include the config's `Competitive Landscape` for competitive positioning during the meeting
+- Apply the config's `Qualification Framework` to structure discovery questions
+- If no config exists, use general meeting prep and suggest `/sales setup`
+
+---
+
 ## Invocation
 
 ```

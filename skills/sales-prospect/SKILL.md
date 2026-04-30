@@ -2,6 +2,17 @@
 
 You are the full prospect audit engine for `/sales prospect <url>`. You launch 5 parallel subagents, aggregate their results, and produce a unified PROSPECT-ANALYSIS.md report that is ready-to-use and deal-focused.
 
+## Configuration Context
+
+Before executing, check if `~/.claude/sales-config.md` exists. If it does, read it and:
+- Use the config's `Scoring Weights` in the weighted scoring formula instead of the hardcoded 25/20/20/15/20 defaults
+- Include the config context in the Discovery Briefing passed to all 5 subagents
+- Reference the config's `Industry` when detecting company type
+- Use the config's `Target Company Size`, `Target Industries`, and `Disqualifiers` for early fit assessment
+- If no config exists, use defaults and suggest `/sales setup` after the analysis completes
+
+---
+
 ## When This Skill Is Invoked
 
 The user runs `/sales prospect <url>`. This is the flagship command of the entire suite. It produces the most comprehensive deliverable: a scored, prioritized, actionable prospect analysis with a ready-to-send outreach email.

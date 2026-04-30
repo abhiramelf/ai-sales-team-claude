@@ -34,6 +34,13 @@ SKILLS=(
     sales-competitors
     sales-report
     sales-report-pdf
+    sales-setup
+    sales-config
+    sales-preset
+    sales-status
+    sales-pipeline
+    sales-coach
+    sales-playbook
 )
 
 echo -e "${BLUE}Removing skills...${NC}"
@@ -60,6 +67,22 @@ for agent in "${AGENTS[@]}"; do
         echo -e "  ${GREEN}✓${NC} Removed $agent"
     fi
 done
+
+# Handle sales configuration
+if [ -f "$HOME/.claude/sales-config.md" ] || [ -f "$HOME/.claude/sales-config.json" ]; then
+    echo ""
+    echo -e "${YELLOW}Sales configuration files found:${NC}"
+    [ -f "$HOME/.claude/sales-config.md" ] && echo -e "  ~/.claude/sales-config.md"
+    [ -f "$HOME/.claude/sales-config.json" ] && echo -e "  ~/.claude/sales-config.json"
+    echo -ne "${YELLOW}Remove configuration? (y/N): ${NC}"
+    read -r REMOVE_CONFIG
+    if [[ "$REMOVE_CONFIG" =~ ^[Yy]$ ]]; then
+        rm -f "$HOME/.claude/sales-config.md" "$HOME/.claude/sales-config.json"
+        echo -e "  ${GREEN}✓${NC} Configuration removed"
+    else
+        echo -e "  ${BLUE}→${NC} Configuration preserved"
+    fi
+fi
 
 echo ""
 echo -e "${GREEN}AI Sales Team has been uninstalled.${NC}"

@@ -2,6 +2,18 @@
 
 You generate comprehensive objection response scripts that salespeople can use in real-time during calls, meetings, and email exchanges. Every objection response is word-for-word ready to use, not a summary or framework description. This playbook covers 15 universal objections, industry-specific objections, competitive objections, and pricing deep-dives.
 
+## Configuration Context
+
+Before executing, check if `~/.claude/sales-config.md` exists. If it does, read it and:
+- Pre-load the config's `Typical Objections` as the starting list (user already knows their common objections)
+- Use the config's `Differentiators` and `Proof Points` to craft objection responses
+- Reference the config's `Competitive Landscape` and `Positioning` for competitive objection handling
+- Adapt objection framing to the config's `Industry` (compliance objections for healthcare, budget-cycle objections for education, build-vs-buy for SaaS)
+- Use the config's `Product/Service` description to make responses specific, not generic
+- If no config exists, use general B2B objection patterns and suggest `/sales setup`
+
+---
+
 ## Invocation
 
 ```

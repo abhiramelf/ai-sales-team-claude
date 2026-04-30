@@ -1,3 +1,19 @@
+<!-- ADAPTIVE TEMPLATE: Read ~/.claude/sales-config.md before using this template.
+Adapt the proposal structure based on the config's Pricing Model:
+
+- Subscription (SaaS): Use tiered pricing table (Essential/Professional/Enterprise). Show monthly and annual pricing. Include seat-based or usage-based tiers.
+- Retainer (Agency/Services): Show monthly retainer packages with scope definitions. Include hours/deliverables per tier. Add overage rates.
+- Project-based (Consulting/Manufacturing): Show phased pricing with milestones. Include timeline, deliverables per phase, and payment schedule.
+- One-time purchase: Show product/license pricing. Include implementation fees, training, and ongoing support costs.
+- Usage-based: Show per-unit pricing with volume tiers. Include usage estimates and projected costs.
+- Licensing: Show per-seat or per-site licensing with annual renewal terms.
+
+Also adapt:
+- The "About Us" section using config's Company Name, Differentiators, and Proof Points
+- The "Problem Statement" using config's Pain Points Your Product Solves
+- The "Why Us" section using config's Competitive Landscape and Positioning
+- The executive summary using config's Product/Service description -->
+
 # Client Proposal
 
 > Professional client proposal template with all 11 sections.

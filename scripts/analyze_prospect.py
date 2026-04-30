@@ -6,10 +6,18 @@ Fetches a company website and extracts structured data for prospect analysis.
 Usage:
     python3 analyze_prospect.py --url <url> --output json
     python3 analyze_prospect.py --help
+
+Config support:
+    --config <path>             Path to JSON config file (e.g. ~/.claude/sales-config.json).
+                                Reads "target_industries" and "industry" fields to prioritize
+                                industry-specific signals during analysis.
+    --target-industries <list>  Comma-separated list of industries to prioritize.
+    Falls back to default behavior when no config/flag is provided.
 """
 
 import argparse
 import json
+import os
 import re
 import ssl
 import sys
@@ -21,6 +29,27 @@ try:
     from urllib.error import HTTPError, URLError
 except ImportError:
     pass
+
+
+# ---------------------------------------------------------------------------
+# Config loading
+# ---------------------------------------------------------------------------
+
+def load_config(config_path):
+    """Load a JSON config file and return the parsed dict, or {} on failure."""
+    if not config_path:
+        return {}
+    path = os.path.expanduser(config_path)
+    if not os.path.isfile(path):
+        print(f"Warning: Config file not found: {path}", file=sys.stderr)
+        return {}
+    try:
+        with open(path, "r") as f:
+            return json.load(f)
+    except (json.JSONDecodeError, OSError) as exc:
+        print(f"Warning: Could not read config {path}: {exc}", file=sys.stderr)
+        return {}
+
 
 # ---------------------------------------------------------------------------
 # Lightweight HTML helpers
@@ -220,14 +249,25 @@ def extract_social_links(html):
     return found
 
 
-def detect_industry(html):
-    """Detect likely industry from page content."""
+def detect_industry(html, target_industries=None):
+    """Detect likely industry from page content.
+
+    Args:
+        html: Raw HTML content to analyze.
+        target_industries: Optional list of industry names to prioritize.
+                           Matching target industries receive a scoring boost.
+    """
     text_lower = html.lower()
     scores = {}
     for industry, keywords in INDUSTRY_KEYWORDS.items():
         score = sum(1 for kw in keywords if kw in text_lower)
         if score > 0:
             scores[industry] = score
+    # Boost target industries so they surface higher when signals are present
+    if target_industries:
+        for ind in target_industries:
+            if ind in scores:
+                scores[ind] += 2  # priority boost for target industries
     sorted_industries = sorted(scores.items(), key=lambda x: -x[1])
     return [ind for ind, _ in sorted_industries[:3]]
 
@@ -333,8 +373,13 @@ SUBPAGES = ["/about", "/team", "/pricing", "/careers", "/blog", "/contact",
             "/about-us", "/our-team", "/leadership", "/jobs"]
 
 
-def analyze(url):
-    """Run full prospect analysis on a URL."""
+def analyze(url, target_industries=None):
+    """Run full prospect analysis on a URL.
+
+    Args:
+        url: Company website URL to analyze.
+        target_industries: Optional list of industry names to prioritize in detection.
+    """
     parsed_url = urlparse(url)
     if not parsed_url.scheme:
         url = "https://" + url
@@ -368,7 +413,7 @@ def analyze(url):
     result["description"] = extract_description(home_parsed)
     result["tech_stack"] = detect_tech_stack(html, home_parsed)
     result["social_links"] = extract_social_links(html)
-    result["industry_signals"] = detect_industry(html)
+    result["industry_signals"] = detect_industry(html, target_industries=target_industries)
     result["contact_info"] = extract_contact_info(html)
     result["company_size_signals"] = estimate_company_size(html)
 
@@ -425,9 +470,25 @@ def main():
     parser.add_argument("--url", required=True, help="Company website URL to analyze")
     parser.add_argument("--output", choices=["json"], default="json", help="Output format (default: json)")
     parser.add_argument("--timeout", type=int, default=10, help="Request timeout in seconds (default: 10)")
+    parser.add_argument("--config", default=None,
+                        help="Path to JSON config file (e.g. ~/.claude/sales-config.json)")
+    parser.add_argument("--target-industries", default=None,
+                        help="Comma-separated list of industries to prioritize (e.g. SaaS,Fintech,AI/ML)")
     args = parser.parse_args()
 
-    result = analyze(args.url)
+    # Resolve target industries from flag, config, or default (None)
+    target_industries = None
+    if args.target_industries:
+        target_industries = [ind.strip() for ind in args.target_industries.split(",")]
+    elif args.config:
+        cfg = load_config(args.config)
+        cfg_industries = cfg.get("target_industries") or cfg.get("industry")
+        if isinstance(cfg_industries, list):
+            target_industries = cfg_industries
+        elif isinstance(cfg_industries, str):
+            target_industries = [cfg_industries]
+
+    result = analyze(args.url, target_industries=target_industries)
     print(json.dumps(result, indent=2, ensure_ascii=False))
 
 

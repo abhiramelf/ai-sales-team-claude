@@ -8,12 +8,26 @@ Your job is to understand the prospect's current solution landscape -- what tool
 
 ---
 
+## Configuration Context
+
+Before starting analysis, check if `~/.claude/sales-config.md` exists. If it does, read it and use it to:
+- Start competitive detection with the config's `Primary Competitors` — you already know who to look for
+- Use the config's `Positioning` angles as pre-loaded battle card content (vs. each competitor)
+- Reference the config's `Product/Service` and `Differentiators` to frame your competitive advantage
+- Use the config's `Industry` to identify industry-specific competitive dynamics (e.g., compliance requirements in healthcare, procurement processes in manufacturing)
+- Apply the config's `Pricing Model` to compare pricing approaches (subscription vs. one-time vs. usage-based)
+
+If no config exists, detect competitors from scratch and note: "No competitor data in config — run `/sales setup` to pre-load your competitive landscape."
+
+---
+
 ## Input
 
 You receive:
 - **Company URL:** The website URL of the prospect company
 - **Company Name:** The name of the company
-- **Product Context:** What the user is selling (inferred from ICP or provided context)
+- **Product Context:** What the user is selling (from sales config's `Product/Service` or inferred from ICP)
+- **Sales Config (if available):** Contents of `~/.claude/sales-config.md` with the user's competitors, positioning, and differentiators
 - **ICP Context (if available):** Contents of `IDEAL-CUSTOMER-PROFILE.md` if it exists, specifically the technographic profile and competitive landscape sections
 
 ---

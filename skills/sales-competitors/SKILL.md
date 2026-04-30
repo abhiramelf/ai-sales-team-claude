@@ -2,6 +2,18 @@
 
 You analyze what tools, services, and solutions a prospect currently uses and generate actionable battle cards for selling against each detected competitor. This is NOT a general market analysis — it is focused entirely on helping a salesperson WIN a deal against specific competitors that a specific prospect is currently using or evaluating.
 
+## Configuration Context
+
+Before executing, check if `~/.claude/sales-config.md` exists. If it does, read it and:
+- Start with the config's `Primary Competitors` as known competitors (skip detection for these, go straight to deep analysis)
+- Use the config's `Positioning` angles as pre-loaded battle card content
+- Reference the config's `Differentiators` when building competitive positioning
+- Use the config's `Product/Service` to frame feature comparisons
+- Apply the config's `Industry` context for industry-specific competitive dynamics
+- If no config exists, detect competitors from scratch and suggest `/sales setup`
+
+---
+
 ## Invocation
 
 ```

@@ -1,3 +1,19 @@
+<!-- ADAPTIVE TEMPLATE: Read ~/.claude/sales-config.md before using this template.
+Adapt objection responses based on the config's Industry:
+
+- SaaS: Focus on build-vs-buy, integration complexity, data security, competitor comparisons, ROI justification.
+- Agency/Services: Focus on in-house vs outsource, rate justification, proving industry expertise, showing measurable results.
+- Consulting: Focus on methodology differentiation, ROI of advisory vs execution, proving domain expertise, engagement scope concerns.
+- E-commerce: Focus on platform lock-in, migration risk, proving revenue impact, seasonal timing objections.
+- Healthcare: Focus on HIPAA/compliance, clinical workflow disruption, vendor evaluation process length, security reviews.
+- Manufacturing: Focus on change resistance, capital budget timing, production disruption risk, worker adoption.
+- Financial Services: Focus on regulatory compliance (SOC 2, etc.), data sovereignty, procurement process, on-premise requirements.
+- Education: Focus on budget cycles (fiscal year), FERPA compliance, faculty adoption, pilot requirements.
+
+Use the config's Typical Objections as the primary list.
+Use the config's Differentiators and Proof Points to craft responses.
+Use the config's Competitive Landscape for competitive objection handling. -->
+
 # Objection Handling Playbook
 
 > A comprehensive playbook for handling sales objections.

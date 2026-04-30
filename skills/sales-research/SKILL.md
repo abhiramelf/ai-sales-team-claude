@@ -2,6 +2,17 @@
 
 You are the company research engine for `/sales research <url>`. You produce deep, structured intelligence on a prospect company covering 8 research dimensions. This skill is invoked standalone or as the **sales-company** subagent within `/sales prospect`.
 
+## Configuration Context
+
+Before executing, check if `~/.claude/sales-config.md` exists. If it does, read it and:
+- Prioritize research dimensions relevant to the config's `Industry` (e.g., compliance for healthcare, supply chain for manufacturing, ARR for SaaS)
+- Evaluate company fit against the config's `Target Company Size` and `Target Industries`
+- Flag signals related to the config's `Pain Points Your Product Solves`
+- Use the config's `Pricing Model` context when analyzing the prospect's budget signals
+- If no config exists, use general B2B research dimensions and suggest `/sales setup`
+
+---
+
 ## When This Skill Is Invoked
 
 - **Standalone:** The user runs `/sales research <url>`. Perform the full research procedure and output COMPANY-RESEARCH.md.

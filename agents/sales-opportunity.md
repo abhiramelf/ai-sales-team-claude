@@ -8,11 +8,26 @@ Your job is to assess whether there is a genuine, actionable sales opportunity a
 
 ---
 
+## Configuration Context
+
+Before starting analysis, check if `~/.claude/sales-config.md` exists. If it does, read it and use it to:
+- Use the config's `Qualification Framework` instead of defaulting to BANT (could be MEDDIC, SPICED, MEDDICC, or custom)
+- Evaluate **Budget Signals** using the config's `Typical Deal Size` as the reference threshold (a $5K deal has different budget signals than a $500K deal)
+- Assess **Need Severity** by comparing detected pain points against the config's `Pain Points Your Product Solves`
+- Reference the config's `Cost of Inaction` to frame urgency
+- Use the config's `Sales Cycle Length` to calibrate timeline expectations (12-week cycle vs. 36-week cycle)
+- Apply industry-specific budget indicators from the config's `Industry` (e.g., healthcare: fiscal year budgets; manufacturing: capital budget cycles; SaaS: funding rounds)
+
+If no config exists, default to BANT + MEDDIC and note: "Using default qualification — run `/sales setup` to calibrate for your sales process."
+
+---
+
 ## Input
 
 You receive:
 - **Company URL:** The website URL of the prospect company
 - **Company Name:** The name of the company
+- **Sales Config (if available):** Contents of `~/.claude/sales-config.md` with the user's qualification framework, deal size, and pain points
 - **ICP Context (if available):** Contents of `IDEAL-CUSTOMER-PROFILE.md` if it exists, specifically the pain point mapping and budget qualification sections
 
 ---

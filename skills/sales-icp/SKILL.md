@@ -1,5 +1,16 @@
 # Ideal Customer Profile Builder
 
+## Configuration Context
+
+Before executing, check if `~/.claude/sales-config.md` exists. If it does, read it and:
+- Pre-seed the ICP with data from the config: `Target Company Size`, `Target Industries`, `Target Geography`, `Target Company Stage`, `Decision Makers`, `Pain Points Your Product Solves`
+- Use the config's `Industry` and `Pricing Model` to shape the ICP's firmographic and technographic criteria
+- Reference the config's `Disqualifiers` as negative ICP signals
+- The user may want to refine or expand beyond what's in the config — use config data as a starting point, not a constraint
+- If no config exists, build the ICP from scratch using the user's description
+
+---
+
 ## Metadata
 - **Title:** Ideal Customer Profile Builder
 - **Invocation:** `/sales icp <description>`

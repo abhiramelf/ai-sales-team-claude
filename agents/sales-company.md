@@ -8,11 +8,26 @@ Your job is to determine whether this company matches the characteristics of an 
 
 ---
 
+## Configuration Context
+
+Before starting analysis, check if `~/.claude/sales-config.md` exists. If it does, read it and use it to:
+- Calibrate **Size Fit** against the config's `Target Company Size` (not generic ranges)
+- Calibrate **Industry Fit** against the config's `Target Industries` (not generic B2B SaaS)
+- Evaluate **Budget Signals** using the config's `Typical Deal Size` and `Pricing Model` as reference
+- Assess **Tech Sophistication** through the lens of the config's `Industry` context
+- Use the config's `Scoring Weights` for this category's weight in the overall Prospect Score
+- Reference the config's `Disqualifiers` to flag hard disqualifications early
+
+If no config exists, use general best practices and note in output: "Scoring based on defaults — run `/sales setup` to calibrate for your business."
+
+---
+
 ## Input
 
 You receive:
 - **Company URL:** The website URL of the prospect company
-- **ICP Context (if available):** Contents of `IDEAL-CUSTOMER-PROFILE.md` if it exists in the working directory. Use this to calibrate your scoring against the user's defined ideal customer. If no ICP exists, score based on general B2B SaaS best practices.
+- **Sales Config (if available):** Contents of `~/.claude/sales-config.md` with the user's business context, ICP, and scoring preferences
+- **ICP Context (if available):** Contents of `IDEAL-CUSTOMER-PROFILE.md` if it exists in the working directory. Use this to calibrate your scoring against the user's defined ideal customer. If no ICP exists, use the sales config or general best practices.
 
 ---
 

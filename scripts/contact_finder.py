@@ -6,10 +6,18 @@ Extracts leadership and team information from company web pages.
 Usage:
     python3 contact_finder.py --url <url> --output json
     python3 contact_finder.py --help
+
+Config support:
+    --config <path>         Path to JSON config file (e.g. ~/.claude/sales-config.json).
+                            Reads "decision_makers" field to prioritize contacts with
+                            matching titles.
+    --target-roles <list>   Comma-separated list of target titles to prioritize.
+    Falls back to default seniority-based sorting when no config/flag is provided.
 """
 
 import argparse
 import json
+import os
 import re
 import ssl
 import sys
@@ -21,6 +29,27 @@ try:
     from urllib.error import HTTPError, URLError
 except ImportError:
     pass
+
+
+# ---------------------------------------------------------------------------
+# Config loading
+# ---------------------------------------------------------------------------
+
+def load_config(config_path):
+    """Load a JSON config file and return the parsed dict, or {} on failure."""
+    if not config_path:
+        return {}
+    path = os.path.expanduser(config_path)
+    if not os.path.isfile(path):
+        print(f"Warning: Config file not found: {path}", file=sys.stderr)
+        return {}
+    try:
+        with open(path, "r") as f:
+            return json.load(f)
+    except (json.JSONDecodeError, OSError) as exc:
+        print(f"Warning: Could not read config {path}: {exc}", file=sys.stderr)
+        return {}
+
 
 # ---------------------------------------------------------------------------
 # Constants
@@ -251,8 +280,14 @@ def _find_nearby_linkedin(html, start, end):
 # Main pipeline
 # ---------------------------------------------------------------------------
 
-def find_contacts(url):
-    """Find team contacts from a company website."""
+def find_contacts(url, target_roles=None):
+    """Find team contacts from a company website.
+
+    Args:
+        url: Company website URL to scan for contacts.
+        target_roles: Optional list of title keywords to prioritize in results.
+                      Contacts whose title matches a target role are sorted first.
+    """
     parsed = urlparse(url)
     if not parsed.scheme:
         url = "https://" + url
@@ -291,9 +326,22 @@ def find_contacts(url):
                 "buying_role": predict_buying_role(title),
             })
 
-    # Sort by seniority importance
+    # Sort by seniority importance, with target roles boosted to the top
     seniority_order = {"C-Suite": 0, "VP": 1, "Director": 2, "Manager": 3, "IC": 4, "Unknown": 5}
-    unique.sort(key=lambda x: seniority_order.get(x["seniority"], 5))
+
+    def sort_key(contact):
+        # If target_roles are specified, contacts matching a target role get priority (0),
+        # otherwise they sort by normal seniority (1, then seniority level).
+        target_match = 1  # default: not a target role match
+        if target_roles:
+            title_lower = contact["title"].lower()
+            for role in target_roles:
+                if role.lower() in title_lower:
+                    target_match = 0
+                    break
+        return (target_match, seniority_order.get(contact["seniority"], 5))
+
+    unique.sort(key=sort_key)
 
     return {
         "url": url,
@@ -315,9 +363,25 @@ def main():
     )
     parser.add_argument("--url", required=True, help="Company website URL")
     parser.add_argument("--output", choices=["json"], default="json", help="Output format (default: json)")
+    parser.add_argument("--config", default=None,
+                        help="Path to JSON config file (e.g. ~/.claude/sales-config.json)")
+    parser.add_argument("--target-roles", default=None,
+                        help="Comma-separated list of target titles to prioritize (e.g. CTO,VP Engineering,Head of Engineering)")
     args = parser.parse_args()
 
-    result = find_contacts(args.url)
+    # Resolve target roles from flag, config, or default (None)
+    target_roles = None
+    if args.target_roles:
+        target_roles = [role.strip() for role in args.target_roles.split(",")]
+    elif args.config:
+        cfg = load_config(args.config)
+        cfg_roles = cfg.get("decision_makers")
+        if isinstance(cfg_roles, list):
+            target_roles = cfg_roles
+        elif isinstance(cfg_roles, str):
+            target_roles = [cfg_roles]
+
+    result = find_contacts(args.url, target_roles=target_roles)
     print(json.dumps(result, indent=2, ensure_ascii=False))
 
 

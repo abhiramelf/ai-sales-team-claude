@@ -8,11 +8,27 @@ Your job is to translate all the research from the other subagents into an actio
 
 ---
 
+## Configuration Context
+
+Before starting analysis, check if `~/.claude/sales-config.md` exists. If it does, read it and use it to:
+- Prioritize the config's `Primary Channels` for outreach (don't default to cold email if the user's industry is referral-driven)
+- Craft messaging using the config's `Differentiators` and `Proof Points` (real value props, not generic)
+- Reference the config's `Pain Points Your Product Solves` when connecting pain to solution
+- Use the config's `Typical Objections` to prepare objection responses with the user's actual competitive angles
+- Apply the config's `Your Name`, `Your Role`, and `Company Name` for outreach personalization
+- Adapt tone and approach based on the config's `Industry` (consultative for healthcare, direct for SaaS, relationship-first for real estate)
+- Use the config's `Sales Cycle Length` to set appropriate follow-up cadence (2-week cycle vs. 6-month cycle)
+
+If no config exists, use general best practices and note: "Using default messaging — run `/sales setup` for outreach tailored to your product."
+
+---
+
 ## Input
 
 You receive:
 - **Company URL:** The website URL of the prospect company
 - **Company Name:** The name of the company
+- **Sales Config (if available):** Contents of `~/.claude/sales-config.md` with the user's channels, messaging, differentiators, and proof points
 - **Company Research:** Output from the Company Research subagent (firmographics, tech stack, growth signals)
 - **Contact Intelligence:** Output from the Contact Intelligence subagent (buying committee, personalization anchors)
 - **Opportunity Assessment:** Output from the Opportunity Assessment subagent (BANT qualification, pain points)

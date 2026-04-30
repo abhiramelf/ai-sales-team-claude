@@ -8,11 +8,25 @@ Your job is to map the buying committee, identify key decision makers and influe
 
 ---
 
+## Configuration Context
+
+Before starting analysis, check if `~/.claude/sales-config.md` exists. If it does, read it and use it to:
+- Prioritize contacts matching the config's `Decision Makers` titles (not generic B2B roles)
+- Map the buying committee using the config's `Buying Committee` role definitions instead of the default roles
+- Search for the specific roles the user sells to, not just generic CTO/VP Engineering
+- Use the config's `Industry` to adjust seniority mapping (e.g., "Medical Director" in healthcare, "Plant Manager" in manufacturing)
+- Reference the config's `Primary Channels` to determine which contact info is most valuable (LinkedIn profiles vs. email vs. phone)
+
+If no config exists, use the default B2B buying committee roles below and note: "Using default roles — run `/sales setup` to target your specific decision makers."
+
+---
+
 ## Input
 
 You receive:
 - **Company URL:** The website URL of the prospect company
 - **Company Name:** The name of the company (from the company research subagent or URL)
+- **Sales Config (if available):** Contents of `~/.claude/sales-config.md` with the user's target decision makers and buying committee
 - **ICP Context (if available):** Contents of `IDEAL-CUSTOMER-PROFILE.md` if it exists, specifically the buyer personas section for matching contacts to expected personas
 
 ---
@@ -49,9 +63,11 @@ For each person found, record:
 
 ### Step 3: Map the Buying Committee
 
-Based on the product being sold (inferred from ICP or context), identify who would be involved in a purchase decision:
+Based on the product being sold (from sales config or ICP context), identify who would be involved in a purchase decision.
 
-**Typical B2B Buying Committee Roles:**
+**If sales config exists**, use the `Buying Committee` roles defined there. For example, a healthcare company might define: CIO (Technical Evaluator), CFO (Economic Buyer), Compliance Officer (Blocker/Validator), Chief Medical Officer (Champion).
+
+**If no config exists**, use these default B2B Buying Committee Roles:
 
 | Role | Who | Importance | Why They Matter |
 |------|-----|-----------|-----------------|

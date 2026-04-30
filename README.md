@@ -4,13 +4,14 @@
 
 <p align="center">
   <a href="#quick-start"><img src="https://img.shields.io/badge/install-one--liner-blue?style=for-the-badge" alt="Install"></a>
-  <a href="#commands"><img src="https://img.shields.io/badge/14_skills-ready-8b5cf6?style=for-the-badge" alt="14 Skills"></a>
+  <a href="#commands"><img src="https://img.shields.io/badge/21_skills-ready-8b5cf6?style=for-the-badge" alt="21 Skills"></a>
+  <a href="#industry-presets"><img src="https://img.shields.io/badge/9_presets-included-f59e0b?style=for-the-badge" alt="9 Presets"></a>
   <a href="#how-it-works"><img src="https://img.shields.io/badge/5_parallel-agents-22c55e?style=for-the-badge" alt="5 Agents"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-gray?style=for-the-badge" alt="MIT License"></a>
 </p>
 
-> **Your AI-powered sales team, running inside Claude Code.**
-> Research any company, qualify leads with BANT + MEDDIC, map the buying committee, generate personalized outreach, prepare for meetings, and produce professional PDF pipeline reports — all from the command line.
+> **Your AI-powered sales team, running inside Claude Code — adaptive to any industry.**
+> Research any company, qualify leads with BANT + MEDDIC, map the buying committee, generate personalized outreach, prepare for meetings, and produce professional PDF pipeline reports — all from the command line. Start with an industry preset or configure from scratch; the system adapts to your business model, sales cycle, and market.
 
 ---
 
@@ -42,18 +43,50 @@ Full analysis saved to PROSPECT-ANALYSIS.md
 
 ---
 
+## Getting Started
+
+Set up the system for your business in under 2 minutes:
+
+```
+/sales setup     → Answer 10 questions about your business
+                   (product, market, pricing, sales cycle, etc.)
+
+/sales preset    → Or start from an industry template
+                   (SaaS, Agency, Consulting, Healthcare, and more)
+```
+
+Both methods generate a configuration at `~/.claude/sales-config.md` that all 21 skills, 5 agents, 6 templates, and 4 scripts automatically read. No config needed — the system defaults to B2B SaaS behavior if you skip this step.
+
+```
+┌────────────────────────────────────────────────────────────┐
+│  RECOMMENDED SETUP FLOW                                    │
+│                                                            │
+│  1. /sales setup          ← Interactive questionnaire      │
+│     — or —                                                 │
+│     /sales preset saas    ← Load a preset, then customize  │
+│                                                            │
+│  2. /sales config         ← Review & tweak your settings   │
+│                                                            │
+│  3. /sales prospect <url> ← Run your first analysis        │
+│                                                            │
+│  4. /sales status         ← Verify everything is working   │
+└────────────────────────────────────────────────────────────┘
+```
+
+---
+
 ## Quick Start
 
 ### One-Command Install
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/zubair-trabzada/ai-sales-team-claude/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/abhiramelf/ai-sales-team-claude/main/install.sh | bash
 ```
 
 ### Manual Install
 
 ```bash
-git clone https://github.com/zubair-trabzada/ai-sales-team-claude.git
+git clone https://github.com/abhiramelf/ai-sales-team-claude.git
 cd ai-sales-team-claude
 ./install.sh
 ```
@@ -68,10 +101,10 @@ pip install -r requirements.txt
 <summary><strong>What the installer does</strong></summary>
 
 ```
-╔══════════════════════════════════════════════════════════╗
-║  AI Sales Team — Claude Code Skills                     ║
-║  14 Skills · 5 Agents · 4 Scripts · PDF                 ║
-╚══════════════════════════════════════════════════════════╝
+╔══════════════════════════════════════════════════════════════╗
+║  AI Sales Team — Claude Code Skills                         ║
+║  21 Skills · 5 Agents · 4 Scripts · 9 Presets · PDF         ║
+╚══════════════════════════════════════════════════════════════╝
 
 Installing skills...
   ✓ sales (orchestrator)
@@ -88,6 +121,13 @@ Installing skills...
   ✓ sales-competitors
   ✓ sales-report
   ✓ sales-report-pdf
+  ✓ sales-setup
+  ✓ sales-config
+  ✓ sales-preset
+  ✓ sales-status
+  ✓ sales-pipeline
+  ✓ sales-coach
+  ✓ sales-playbook
 
 Installing agents...
   ✓ sales-company
@@ -117,6 +157,17 @@ Installing templates...
 
 ## Commands
 
+### Setup & Config
+
+| Command | Description | Output |
+|:--------|:------------|:-------|
+| `/sales setup` | Interactive onboarding questionnaire | `~/.claude/sales-config.md` |
+| `/sales config` | View/edit sales configuration | Terminal output |
+| `/sales preset` / `/sales preset <industry>` | Load industry preset | `~/.claude/sales-config.md` |
+| `/sales status` | System status and diagnostic | Terminal output |
+
+### Research & Analysis
+
 | Command | Description | Output |
 |:--------|:------------|:-------|
 | `/sales prospect <url>` | Full prospect audit — **5 parallel agents** | `PROSPECT-ANALYSIS.md` |
@@ -124,15 +175,85 @@ Installing templates...
 | `/sales research <url>` | Company research & firmographics | `COMPANY-RESEARCH.md` |
 | `/sales qualify <url>` | BANT + MEDDIC lead scoring | `LEAD-QUALIFICATION.md` |
 | `/sales contacts <url>` | Decision maker identification | `DECISION-MAKERS.md` |
+| `/sales competitors <url>` | Competitive intelligence | `COMPETITIVE-INTEL.md` |
+
+### Outreach & Sales
+
+| Command | Description | Output |
+|:--------|:------------|:-------|
 | `/sales outreach <prospect>` | Cold outreach email sequence | `OUTREACH-SEQUENCE.md` |
 | `/sales followup <prospect>` | Follow-up email sequence | `FOLLOWUP-SEQUENCE.md` |
 | `/sales prep <url>` | Meeting preparation brief | `MEETING-PREP.md` |
 | `/sales proposal <client>` | Client proposal generator | `CLIENT-PROPOSAL.md` |
 | `/sales objections <topic>` | Objection handling playbook | `OBJECTION-PLAYBOOK.md` |
+
+### Strategy & Reporting
+
+| Command | Description | Output |
+|:--------|:------------|:-------|
 | `/sales icp <description>` | Ideal Customer Profile builder | `IDEAL-CUSTOMER-PROFILE.md` |
-| `/sales competitors <url>` | Competitive intelligence | `COMPETITIVE-INTEL.md` |
+| `/sales pipeline` | Deal pipeline view | Terminal output |
+| `/sales coach` | Sales call coaching | Terminal output |
+| `/sales playbook` | Complete sales playbook | `SALES-PLAYBOOK.md` |
 | `/sales report` | Pipeline report (Markdown) | `SALES-REPORT.md` |
 | `/sales report-pdf` | Pipeline report (PDF) | `SALES-REPORT-*.pdf` |
+
+---
+
+## Configuration
+
+The adaptive config system lets every skill, agent, template, and script tailor output to your business.
+
+### Config Files
+
+```
+~/.claude/sales-config.md    ← Human-readable config (what skills read)
+~/.claude/sales-config.json  ← Machine-readable mirror (what Python scripts read)
+```
+
+### What Gets Configured
+
+```
+┌──────────────────────────────────────────────────────────────┐
+│  CONFIGURATION DIMENSIONS                                    │
+│                                                              │
+│  Company       Product name, type, industry, size            │
+│  Market        Target segments, buyer personas, geo          │
+│  Sales Cycle   Length, deal size, decision process            │
+│  Pricing       Model, range, packaging                       │
+│  Messaging     Value props, differentiators, proof points    │
+│  Competitors   Known competitors, positioning                │
+│  Qualification Custom BANT/MEDDIC weights                    │
+└──────────────────────────────────────────────────────────────┘
+```
+
+### Backwards Compatibility
+
+No config file? No problem. All skills default to the original B2B SaaS behavior. The config system is purely additive — existing workflows continue to work exactly as before.
+
+---
+
+## Industry Presets
+
+Load a complete configuration for your industry with a single command:
+
+```
+/sales preset <industry>
+```
+
+| Preset | Typical Deal Size | Sales Cycle | Key Focus Areas |
+|:-------|:-----------------|:------------|:----------------|
+| **SaaS** | $5K-$500K ARR | 30-90 days | MRR, churn, expansion revenue |
+| **Agency / Services** | $10K-$250K | 2-8 weeks | Retainers, scope, case studies |
+| **Consulting** | $50K-$2M | 1-6 months | Methodology, ROI, thought leadership |
+| **E-commerce** | $1K-$100K | 1-4 weeks | AOV, conversion, logistics |
+| **Healthcare** | $100K-$5M | 3-18 months | Compliance, HIPAA, clinical outcomes |
+| **Manufacturing** | $50K-$10M | 3-12 months | Supply chain, MOQ, certifications |
+| **Real Estate** | $10K-$500K | 2-12 weeks | Market data, zoning, ROI projections |
+| **Financial Services** | $25K-$2M | 1-6 months | Regulatory, risk, AUM |
+| **Education** | $5K-$500K | 2-6 months | Procurement cycles, grants, outcomes |
+
+Each preset configures the full stack: qualification weights, outreach tone, proposal structure, objection responses, ICP criteria, and competitive framing.
 
 ---
 
@@ -140,7 +261,7 @@ Installing templates...
 
 ### Architecture
 
-The system uses a three-layer architecture — one orchestrator skill routes commands to 13 sub-skills, with the flagship `/sales prospect` command launching 5 specialized agents in parallel:
+The system uses a three-layer architecture — one orchestrator skill routes commands to 20 sub-skills, with the flagship `/sales prospect` command launching 5 specialized agents in parallel:
 
 ```
                          ┌──────────────────────────┐
@@ -181,6 +302,18 @@ The system uses a three-layer architecture — one orchestrator skill routes com
         │ │Position:15%│ │  │ │Ready: 20%│ │
         │ └────────────┘ │  │ └──────────┘ │
         └────────────────┘  └──────────────┘
+```
+
+### Config-Aware Pipeline
+
+All components read the active configuration to adapt their behavior:
+
+```
+┌─────────────────┐     ┌────────────────────┐     ┌──────────────────┐
+│  sales-config   │────▶│  Every Skill/Agent  │────▶│  Tailored Output  │
+│  .md / .json    │     │  reads config at    │     │  for your industry│
+│                 │     │  execution time     │     │  and business     │
+└─────────────────┘     └────────────────────┘     └──────────────────┘
 ```
 
 ### Cross-Skill Integration
@@ -239,11 +372,11 @@ Every prospect gets a **weighted composite score (0-100)** calculated from 5 dim
 ```
   Score    Grade    Action
  ───────────────────────────────────────────────────────────
-  90-100    A+      🔥  Hot Lead — prioritize immediately
-  75-89     A       ✅  Strong Prospect — invest significant effort
-  60-74     B       📊  Qualified Lead — pursue with standard approach
-  40-59     C       🔄  Lukewarm — nurture, don't hard sell
-   0-39     D       ⏸️   Poor Fit — deprioritize or disqualify
+  90-100    A+      Hot Lead — prioritize immediately
+  75-89     A       Strong Prospect — invest significant effort
+  60-74     B       Qualified Lead — pursue with standard approach
+  40-59     C       Lukewarm — nurture, don't hard sell
+   0-39     D       Poor Fit — deprioritize or disqualify
 ```
 
 ### Qualification Frameworks
@@ -373,7 +506,7 @@ ai-sales-team-claude/
 │
 ├── sales/SKILL.md                     ← Main orchestrator (routes all /sales commands)
 │
-├── skills/                            ← 13 sub-skills
+├── skills/                            ← 20 sub-skills
 │   ├── sales-prospect/SKILL.md           Full prospect audit (launches 5 agents)
 │   ├── sales-research/SKILL.md           Company research & firmographics
 │   ├── sales-qualify/SKILL.md            Lead qualification (BANT + MEDDIC)
@@ -386,7 +519,14 @@ ai-sales-team-claude/
 │   ├── sales-icp/SKILL.md                Ideal Customer Profile builder
 │   ├── sales-competitors/SKILL.md        Competitive intelligence
 │   ├── sales-report/SKILL.md             Pipeline report (Markdown)
-│   └── sales-report-pdf/SKILL.md         Pipeline report (PDF)
+│   ├── sales-report-pdf/SKILL.md         Pipeline report (PDF)
+│   ├── sales-setup/SKILL.md              Interactive onboarding questionnaire
+│   ├── sales-config/SKILL.md             View/edit sales configuration
+│   ├── sales-preset/SKILL.md             Load industry preset
+│   ├── sales-status/SKILL.md             System status and diagnostic
+│   ├── sales-pipeline/SKILL.md           Deal pipeline view
+│   ├── sales-coach/SKILL.md              Sales call coaching
+│   └── sales-playbook/SKILL.md           Complete sales playbook
 │
 ├── agents/                            ← 5 parallel subagents
 │   ├── sales-company.md                  Company fit & firmographics (25%)
@@ -426,6 +566,9 @@ ai-sales-team-claude/
 ### Founders & Solopreneurs
 
 ```bash
+# Set up for your industry
+/sales preset saas
+
 # Full prospect intelligence
 /sales prospect https://target.com
 
@@ -442,14 +585,17 @@ ai-sales-team-claude/
 ### Sales Teams
 
 ```bash
+# View your pipeline
+/sales pipeline
+
 # Qualify inbound leads
 /sales qualify https://lead.com
 
 # Map the buying committee
 /sales contacts https://lead.com
 
-# Handle pricing objections
-/sales objections "enterprise SaaS"
+# Get coached before a call
+/sales coach
 ```
 
 </td>
@@ -458,14 +604,17 @@ ai-sales-team-claude/
 ### Agency Owners
 
 ```bash
+# Load agency preset
+/sales preset agency
+
 # Client proposal with pricing
 /sales proposal "Client Name"
 
 # Competitive positioning
 /sales competitors https://client.com
 
-# Define ideal customer
-/sales icp "B2B SaaS, 50-200 emp"
+# Build your sales playbook
+/sales playbook
 ```
 
 </td>
@@ -493,7 +642,7 @@ ai-sales-team-claude/
 ./uninstall.sh
 
 # Or remotely
-curl -fsSL https://raw.githubusercontent.com/zubair-trabzada/ai-sales-team-claude/main/uninstall.sh | bash
+curl -fsSL https://raw.githubusercontent.com/abhiramelf/ai-sales-team-claude/main/uninstall.sh | bash
 ```
 
 Removes all skills, agents, scripts, and templates from `~/.claude/`. Python packages are not removed.
@@ -501,8 +650,8 @@ Removes all skills, agents, scripts, and templates from `~/.claude/`. Python pac
 ---
 
 <p align="center">
-  <strong>MIT License</strong> · Copyright (c) 2026 Zubair Trabzada
+  <strong>MIT License</strong> · Original by <a href="https://github.com/zubair-trabzada">Zubair Trabzada</a> · Adaptation framework by <a href="https://github.com/abhiramelf">abhiramelf</a>
   <br><br>
-  <a href="https://github.com/zubair-trabzada/ai-sales-team-claude/issues">Report Bug</a> ·
-  <a href="https://github.com/zubair-trabzada/ai-sales-team-claude/issues">Request Feature</a>
+  <a href="https://github.com/abhiramelf/ai-sales-team-claude/issues">Report Bug</a> ·
+  <a href="https://github.com/abhiramelf/ai-sales-team-claude/issues">Request Feature</a>
 </p>

@@ -1,3 +1,18 @@
+<!-- ADAPTIVE TEMPLATE: Read ~/.claude/sales-config.md before using this template.
+Adapt the structure below based on the config's Industry:
+
+- SaaS/Software: Lead with product capabilities and integrations. CTA: "15-minute demo" or "free trial". Social proof: metrics (ARR increase, churn reduction, time saved).
+- Agency/Services: Lead with results and client outcomes. CTA: "strategy call" or "audit". Social proof: client case studies, named brands.
+- Consulting: Lead with expertise and methodology. CTA: "diagnostic call" or "assessment". Social proof: transformation stories, ROI calculations.
+- E-commerce: Lead with revenue impact and ROAS. CTA: "quick store audit" or "revenue analysis". Social proof: GMV increases, conversion rate lifts.
+- Healthcare: Lead with compliance, patient outcomes, efficiency. CTA: "compliance review" or "workflow assessment". Tone: consultative, not aggressive. Include regulatory awareness.
+- Manufacturing: Lead with efficiency, cost reduction, downtime prevention. CTA: "plant assessment" or "efficiency audit". Social proof: production increases, defect reduction.
+- Real Estate: Lead with market intelligence and deal flow. CTA: "market briefing" or "portfolio review". Tone: relationship-first.
+- Financial Services: Lead with risk reduction, compliance, and ROI. CTA: "risk assessment" or "compliance review". Tone: trust-building, conservative.
+- Education: Lead with student outcomes and administrative efficiency. CTA: "program review" or "pilot proposal". Social proof: student success metrics.
+
+Also use the config's Company Name, Your Name, Product/Service, Differentiators, and Proof Points to replace generic placeholders. -->
+
 # Cold Outreach Sequence — 5-Email Framework
 
 > A structured 5-email cold outreach sequence with integrated LinkedIn touchpoints.

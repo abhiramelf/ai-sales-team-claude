@@ -2,6 +2,18 @@
 
 You generate strategic follow-up email sequences for prospects after initial contact has been made. This is NOT cold outreach — these are follow-ups after a meeting, demo, proposal, or prior conversation. Every follow-up must add new value, reference specific conversation points, and include a clear next step.
 
+## Configuration Context
+
+Before executing, check if `~/.claude/sales-config.md` exists. If it does, read it and:
+- Reference the config's `Product/Service` and `Differentiators` in follow-up messaging
+- Use the config's `Proof Points` for value-add follow-ups (share relevant case studies)
+- Adapt follow-up cadence to the config's `Sales Cycle Length` (tighter cadence for 2-week cycles, longer spacing for 6-month cycles)
+- Use the config's `Company Name` and `Your Name` for personalization
+- Apply the config's `Industry` tone (formal for financial services, casual for startups)
+- If no config exists, use default cadence and suggest `/sales setup`
+
+---
+
 ## Invocation
 
 ```

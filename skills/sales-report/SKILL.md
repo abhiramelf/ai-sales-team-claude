@@ -1,5 +1,16 @@
 # Sales Pipeline Report Generator
 
+## Configuration Context
+
+Before executing, check if `~/.claude/sales-config.md` exists. If it does, read it and:
+- Include the config's `Company Name` in the report header
+- Use the config's `Scoring Weights` when summarizing prospect scores
+- Reference the config's `Sales Stages` (if defined) for pipeline categorization
+- Use the config's `Typical Deal Size` for revenue projections
+- If no config exists, use default formatting and suggest `/sales setup`
+
+---
+
 ## Metadata
 - **Title:** Sales Pipeline Report Generator
 - **Invocation:** `/sales report`

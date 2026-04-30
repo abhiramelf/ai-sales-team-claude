@@ -1,7 +1,7 @@
 #!/bin/bash
 # ============================================================================
 # AI Sales Team — Claude Code Skills Installer
-# 14 Skills · 5 Agents · 4 Scripts · PDF
+# 21 Skills · 5 Agents · 4 Scripts · 9 Presets
 # ============================================================================
 set -e
 
@@ -17,7 +17,7 @@ echo ""
 echo -e "${BLUE}╔══════════════════════════════════════════════════════════════╗${NC}"
 echo -e "${BLUE}║                                                              ║${NC}"
 echo -e "${BLUE}║${NC}   ${CYAN}AI Sales Team — Claude Code Skills${NC}                        ${BLUE}║${NC}"
-echo -e "${BLUE}║${NC}   ${GREEN}14 Skills · 5 Agents · 4 Scripts · PDF${NC}                    ${BLUE}║${NC}"
+echo -e "${BLUE}║${NC}   ${GREEN}21 Skills · 5 Agents · 4 Scripts · 9 Presets${NC}              ${BLUE}║${NC}"
 echo -e "${BLUE}║                                                              ║${NC}"
 echo -e "${BLUE}╚══════════════════════════════════════════════════════════════╝${NC}"
 echo ""
@@ -109,6 +109,13 @@ SKILLS=(
     sales-competitors
     sales-report
     sales-report-pdf
+    sales-setup
+    sales-config
+    sales-preset
+    sales-status
+    sales-pipeline
+    sales-coach
+    sales-playbook
 )
 
 for skill in "${SKILLS[@]}"; do
@@ -175,6 +182,18 @@ for template in "$SOURCE_DIR"/templates/*.md; do
 done
 
 # ---------------------------------------------------------------------------
+# Check for existing configuration
+# ---------------------------------------------------------------------------
+echo -e "${BLUE}Checking configuration...${NC}"
+if [ -f "$HOME/.claude/sales-config.md" ]; then
+    echo -e "  ${GREEN}✓${NC} Existing sales configuration found"
+    echo -e "      Run ${CYAN}/sales config${NC} to review or update"
+else
+    echo -e "  ${YELLOW}⚠${NC} No sales configuration found"
+    echo -e "      Run ${CYAN}/sales setup${NC} after install to configure for your business"
+fi
+
+# ---------------------------------------------------------------------------
 # Check Python dependencies
 # ---------------------------------------------------------------------------
 echo -e "${BLUE}Checking Python environment...${NC}"
@@ -228,20 +247,34 @@ echo ""
 # ---------------------------------------------------------------------------
 echo -e "${BLUE}Command Reference:${NC}"
 echo ""
+echo -e "  ${YELLOW}Setup & Config:${NC}"
+echo -e "  ${CYAN}/sales setup${NC}                   Configure for your business"
+echo -e "  ${CYAN}/sales config${NC}                  View/edit configuration"
+echo -e "  ${CYAN}/sales preset${NC}                  Load industry preset"
+echo -e "  ${CYAN}/sales status${NC}                  System status check"
+echo ""
+echo -e "  ${YELLOW}Research & Analysis:${NC}"
 echo -e "  ${CYAN}/sales prospect <url>${NC}          Full prospect analysis (5 agents)"
 echo -e "  ${CYAN}/sales quick <url>${NC}             60-second prospect snapshot"
 echo -e "  ${CYAN}/sales research <url>${NC}          Deep company research"
-echo -e "  ${CYAN}/sales qualify <url>${NC}           BANT + MEDDIC lead scoring"
+echo -e "  ${CYAN}/sales qualify <url>${NC}           Lead qualification"
 echo -e "  ${CYAN}/sales contacts <url>${NC}          Find decision makers"
-echo -e "  ${CYAN}/sales outreach <prospect>${NC}     Generate outreach sequences"
-echo -e "  ${CYAN}/sales followup <prospect>${NC}     Create follow-up sequences"
-echo -e "  ${CYAN}/sales prep <url>${NC}              Meeting preparation brief"
-echo -e "  ${CYAN}/sales proposal <client>${NC}       Client proposal generation"
-echo -e "  ${CYAN}/sales objections <topic>${NC}      Objection handling playbook"
-echo -e "  ${CYAN}/sales icp <description>${NC}       Ideal Customer Profile builder"
 echo -e "  ${CYAN}/sales competitors <url>${NC}       Competitive intelligence"
-echo -e "  ${CYAN}/sales report${NC}                  Sales pipeline report (Markdown)"
-echo -e "  ${CYAN}/sales report-pdf${NC}              Sales pipeline report (PDF)"
 echo ""
-echo -e "  ${YELLOW}Tip:${NC} Start with ${CYAN}/sales prospect <url>${NC} for a full analysis!"
+echo -e "  ${YELLOW}Outreach & Sales:${NC}"
+echo -e "  ${CYAN}/sales outreach <prospect>${NC}     Cold outreach sequences"
+echo -e "  ${CYAN}/sales followup <prospect>${NC}     Follow-up sequences"
+echo -e "  ${CYAN}/sales prep <url>${NC}              Meeting preparation"
+echo -e "  ${CYAN}/sales proposal <client>${NC}       Client proposals"
+echo -e "  ${CYAN}/sales objections <topic>${NC}      Objection playbook"
+echo ""
+echo -e "  ${YELLOW}Strategy & Reporting:${NC}"
+echo -e "  ${CYAN}/sales icp <description>${NC}       Ideal Customer Profile"
+echo -e "  ${CYAN}/sales pipeline${NC}                Deal pipeline view"
+echo -e "  ${CYAN}/sales coach${NC}                   Sales call coaching"
+echo -e "  ${CYAN}/sales playbook${NC}                Complete sales playbook"
+echo -e "  ${CYAN}/sales report${NC}                  Pipeline report (Markdown)"
+echo -e "  ${CYAN}/sales report-pdf${NC}              Pipeline report (PDF)"
+echo ""
+echo -e "  ${YELLOW}Tip:${NC} Start with ${CYAN}/sales setup${NC} to configure for your business!"
 echo ""

@@ -1,3 +1,19 @@
+<!-- ADAPTIVE TEMPLATE: Read ~/.claude/sales-config.md before using this template.
+Adapt meeting preparation based on the config's Industry:
+
+- SaaS: Prepare demo talking points, technical integration questions, ROI calculator inputs.
+- Agency/Services: Prepare portfolio examples, case study walkthroughs, scope definition questions.
+- Consulting: Prepare methodology overview, diagnostic framework, stakeholder alignment questions.
+- Healthcare: Prepare compliance documentation, clinical workflow mapping, regulatory timeline awareness.
+- Manufacturing: Prepare site assessment framework, production impact projections, implementation timeline with downtime planning.
+- Financial Services: Prepare compliance certifications, security architecture overview, risk assessment framework.
+- Education: Prepare pilot program structure, student outcome metrics, faculty onboarding plan.
+
+Use the config's Qualification Framework to structure discovery questions.
+Use the config's Pain Points and Differentiators for talking points.
+Use the config's Buying Committee to prepare for each attendee's priorities.
+Use the config's Typical Objections for objection-ready responses. -->
+
 # Meeting Preparation Brief
 
 > Comprehensive meeting preparation document for sales calls and demos.

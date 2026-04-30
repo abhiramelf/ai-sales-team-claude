@@ -1,3 +1,14 @@
+<!-- ADAPTIVE TEMPLATE: Read ~/.claude/sales-config.md before using this template.
+Adapt referral outreach based on the config's Industry:
+
+- For all industries: The referral source is the strongest element — lead with it.
+- For enterprise sales (Healthcare, Financial Services, Manufacturing): Referrals carry extra weight due to longer evaluation cycles. Emphasize trust and credibility.
+- For SMB sales (Agency, E-commerce, SaaS startups): Referrals accelerate already-short cycles. Be direct about the value and ask for a quick call.
+- For consulting/services: Position the referral as an endorsement of methodology and expertise.
+
+Use the config's Proof Points for the specific results to reference.
+Use the config's Company Name, Your Name, and Product/Service for context. -->
+
 # Referral-Based Outreach Sequence — 3-Email Framework
 
 > A 3-email referral outreach sequence for when a mutual connection
